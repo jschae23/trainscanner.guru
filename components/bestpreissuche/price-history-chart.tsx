@@ -79,13 +79,15 @@ export const PriceHistoryChart = memo(function PriceHistoryChart({ history, titl
     <div className="p-4 border rounded-lg bg-gray-50/50">
       <div className="flex justify-between items-center mb-4">
         <h4 className="font-semibold text-gray-800">{title}</h4>
-        <div className={`flex items-center gap-1 text-sm font-medium ${trend.color}`}>
-          {trend.icon}
-          <span>{trend.text}</span>
-          {trend.percentage !== null && (
-            <span className="font-bold">({trend.percentage > 0 ? '+' : ''}{trend.percentage.toFixed(0)}%)</span>
-          )}
-        </div>
+        {trend && (
+          <div className={`flex items-center gap-1 text-sm font-medium ${trend.color}`}>
+            {trend.icon}
+            <span>{trend.text}</span>
+            {trend.percentage !== null && (
+              <span className="font-bold">({trend.percentage > 0 ? '+' : ''}{trend.percentage.toFixed(0)}%)</span>
+            )}
+          </div>
+        )}
       </div>
       {history.length === 1 ? (
         <div className="text-center text-sm text-gray-600 py-4">

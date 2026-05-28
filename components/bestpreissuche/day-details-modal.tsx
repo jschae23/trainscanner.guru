@@ -274,7 +274,7 @@ export function DayDetailsModal({
 
   const swipeDirection = direction
 
-  // Empfohlene Fahrt immer oben einfügen, falls nicht enthalten
+
   let displayedIntervalsWithRecommendation = displayedIntervals
   if (recommendedTrip) {
     const alreadyIncluded = displayedIntervals.some(

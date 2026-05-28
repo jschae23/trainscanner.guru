@@ -3,7 +3,7 @@
 import React from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { logWarn } from "@/lib/shared/logger"
 
 const LOG_SCOPE = "bestpreissuche.price-calendar"

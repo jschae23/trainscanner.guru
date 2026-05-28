@@ -26,12 +26,7 @@ export function RecommendationCards({
             <Euro className="h-3 w-3 mr-1" />
             Bestpreis
           </Badge>
-          {recommendation && recommendedTrip && recommendedTrip.preis === data.preis && (
-            <Badge className="bg-amber-100 text-amber-800 border border-amber-400 px-3 py-1">
-              <Star className="h-3 w-3 mr-1" />
-              Empfohlen
-            </Badge>
-          )}
+
         </div>
         <div className="flex-1 flex flex-col justify-between">
           <div>
@@ -102,14 +97,13 @@ export function RecommendationCards({
       </div>
 
       {/* KI-Empfehlung */}
-      {recommendation && recommendedTrip && recommendedTrip.preis !== data.preis ? (
+      {recommendation && recommendedTrip && recommendedTrip.preis !== data.preis && (
         <div className="bg-amber-50 border-2 border-amber-200 p-4 rounded-lg relative flex flex-col justify-between h-full">
           <div className="absolute -top-3 left-4">
             <Popover>
               <PopoverTrigger asChild>
                 <Badge className="bg-amber-600 text-white px-3 py-1 cursor-help">
                   <Star className="h-3 w-3 mr-1" />
-                  Empfohlen
                 </Badge>
               </PopoverTrigger>
               <PopoverContent className="max-w-sm text-sm">
@@ -184,14 +178,6 @@ export function RecommendationCards({
                 Empfehlung buchen
               </Button>
             )}
-          </div>
-        </div>
-      ) : (
-        <div className="hidden md:flex bg-amber-50 border-2 border-amber-200 p-4 rounded-lg shadow-sm items-center justify-center">
-          <div className="text-center">
-            <Star className="h-8 w-8 mx-auto mb-2 text-amber-400" />
-            <div className="font-semibold text-amber-800">Bestpreis ist bereits optimal!</div>
-            <div className="text-sm mt-1 text-amber-700">Die KI-Analyse bestätigt: Diese Verbindung bietet die beste Balance aus Preis, Zeit und Komfort.<br/>Keine bessere Empfehlung möglich.</div>
           </div>
         </div>
       )}

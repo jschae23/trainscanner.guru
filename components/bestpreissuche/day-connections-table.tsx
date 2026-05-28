@@ -166,7 +166,6 @@ export function ConnectionsTable({
                           <PopoverTrigger asChild>
                             <Badge className="bg-amber-100 text-amber-800 border border-amber-400 rounded-full cursor-help flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
                               <Star className="h-3 w-3" />
-                              Empfohlen
                             </Badge>
                           </PopoverTrigger>
                           <PopoverContent className="w-64 text-sm">
@@ -346,7 +345,6 @@ export function ConnectionsTable({
                           <PopoverTrigger asChild>
                             <Badge className="bg-amber-100 text-amber-800 border border-amber-400 rounded-full cursor-help flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
                               <Star className="h-3 w-3" />
-                              Empfohlen
                             </Badge>
                           </PopoverTrigger>
                           <PopoverContent className="w-64 text-sm">
