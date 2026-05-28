@@ -11,14 +11,12 @@ interface FooterProps {
 export function Footer({ show = false }: FooterProps) {
   const currentYear = getCurrentYear()
   const appVersion = getAppVersion()
-  const [showFooter, setShowFooter] = useState(show)
-
-  useEffect(() => {
-    const shouldShowFooter =
-      window.location.hostname === "trainscanner.guru" ||
-      show
-    setShowFooter(shouldShowFooter)
-  }, [show])
+  const [showFooter] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.hostname === "trainscanner.guru" || show
+    }
+    return show
+  })
 
   if (!showFooter) return null
 

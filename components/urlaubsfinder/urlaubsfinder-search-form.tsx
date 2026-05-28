@@ -189,6 +189,8 @@ export function UrlauberfinderSearchForm({
   const homeSuggestionsRef = useRef<HTMLDivElement>(null)
   const homeDebounceRef = useRef<NodeJS.Timeout | undefined>(undefined)
 
+  const fetchHomeSuggestionsRef = useRef<((query: string, retryCount?: number) => Promise<void>) | null>(null)
+
   const fetchHomeSuggestions = useCallback(async (query: string, retryCount = 0) => {
     const maxRetries = 3
 
@@ -213,7 +215,7 @@ export function UrlauberfinderSearchForm({
           const errorMsg = `Zu viele Anfragen, versuche erneut in ${Math.ceil(retryAfter / 1000)}s...`
           setHomeError(errorMsg)
           await new Promise(resolve => setTimeout(resolve, retryAfter))
-          return fetchHomeSuggestions(query, retryCount + 1)
+          return fetchHomeSuggestionsRef.current?.(query, retryCount + 1)
         } else {
           throw new Error("Rate limit exceeded. Bitte versuche es in einigen Sekunden erneut.")
         }
@@ -236,6 +238,10 @@ export function UrlauberfinderSearchForm({
       setLoadingHome(false)
     }
   }, [])
+
+  useEffect(() => {
+    fetchHomeSuggestionsRef.current = fetchHomeSuggestions
+  }, [fetchHomeSuggestions])
 
   const handleHomeInput = useCallback(
     (value: string) => {
@@ -295,63 +301,6 @@ export function UrlauberfinderSearchForm({
       if (homeDebounceRef.current) clearTimeout(homeDebounceRef.current)
     }
   }, [])
-
-  useEffect(() => {
-    if (!initialParams || Object.keys(initialParams).length === 0) {
-      return
-    }
-
-    if (initialParams.homeStation || initialParams.homeStationLabel) {
-      setHomeStation(initialParams.homeStationLabel || initialParams.homeStation || "")
-      setHomeStationId(initialParams.homeStationExtId || "")
-    }
-
-    const hydratedDestinations = (initialParams.destinations ?? []).filter(destination =>
-      ICE_STATIONS.some(station => station.name === destination)
-    )
-    if (hydratedDestinations.length > 0) {
-      setSelectedDestinations(hydratedDestinations)
-    }
-
-    if (initialParams.outwardDate) {
-      setOutwardDate(initialParams.outwardDate)
-    }
-
-    if (initialParams.returnDate) {
-      setReturnDate(initialParams.returnDate)
-      setIncludeReturnDate(true)
-    } else {
-      setIncludeReturnDate(false)
-    }
-
-    setAlter(initialParams.alter || "ERWACHSENER")
-
-    const normalizedDiscount = normalizeDiscount(
-      initialParams.ermaessigungArt || "KEINE_ERMAESSIGUNG",
-      initialParams.ermaessigungKlasse || "KLASSENLOS"
-    )
-    setErmaessigungArt(normalizedDiscount.art)
-    setErmaessigungKlasse(normalizedDiscount.klasse)
-
-    if (initialParams.klasse) {
-      setKlasse(initialParams.klasse)
-    }
-
-    setSchnelleVerbindungen(initialParams.schnelleVerbindungen ?? true)
-
-    const mappedUmstiegsOption = !initialParams.maximaleUmstiege
-      ? "alle"
-      : initialParams.maximaleUmstiege === "0"
-      ? "direkt"
-      : initialParams.maximaleUmstiege
-    setUmstiegsOption(mappedUmstiegsOption)
-
-    setOutwardAbfahrtAb(initialParams.outwardAbfahrtAb || "")
-    setOutwardAnkunftBis(initialParams.outwardAnkunftBis || "")
-    setReturnAbfahrtAb(initialParams.returnAbfahrtAb || "")
-    setReturnAnkunftBis(initialParams.returnAnkunftBis || "")
-    setUmstiegszeit(initialParams.umstiegszeit || "normal")
-  }, [initialParams])
 
   const submitSearch = (params: UrlauberfinderSearchParams) => {
     onSearch(params)

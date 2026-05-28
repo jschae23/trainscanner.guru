@@ -74,14 +74,6 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
     return `${year}-${month}-${day}`
   }
   
-  if (resultDates.length === 0 && !isStreaming) {
-    return (
-      <div className="text-center py-8 text-gray-500">
-        Keine Suchergebnisse verfügbar. Bitte starte eine neue Suche.
-      </div>
-    )
-  }
-
   // Get the date range from results or expected range
   const dates = Object.keys(results).filter(key => key !== '_meta').sort()
   
@@ -139,19 +131,11 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
   const firstExpectedDate = expectedDateRange.length > 0 ? new Date(expectedDateRange[0]) : (dates.length > 0 ? new Date(dates[0]) : new Date())
   const lastExpectedDate = expectedDateRange.length > 0 ? new Date(expectedDateRange[expectedDateRange.length - 1]) : (dates.length > 0 ? new Date(dates[dates.length - 1]) : new Date())
 
-  if (dates.length === 0 && expectedDateRange.length === 0) return null
-
   const firstDate = dates.length > 0 ? new Date(dates[0]) : firstExpectedDate
   const lastDate = dates.length > 0 ? new Date(dates[dates.length - 1]) : lastExpectedDate
 
-  // State for calendar navigation
-  const [currentMonth, setCurrentMonth] = useState(() => new Date())
-
-  useEffect(() => {
-    if (firstDate) {
-      setCurrentMonth(new Date(firstDate.getFullYear(), firstDate.getMonth(), 1))
-    }
-  }, [firstDate.getFullYear(), firstDate.getMonth()])
+  // State for calendar navigation - initialisiere mit Monat des ersten Datums
+  const [currentMonth, setCurrentMonth] = useState(() => new Date(firstDate.getFullYear(), firstDate.getMonth(), 1))
 
   // Find min and max prices for color coding
   const prices = Object.values(results)
@@ -264,7 +248,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
 
   // Fortschritt und Zeitmessung mit Progress-API
   const [elapsed, setElapsed] = useState(0)
-  const [startTime] = useState(Date.now())
+  const [startTime] = useState(() => Date.now())
   const [progressData, setProgressData] = useState<{
     queueSize?: number
     estimatedTimeRemaining?: number
@@ -276,7 +260,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
 
   // Popup bei Tab-Wechsel/-Schließen während Suche
   const [showAbortModal, setShowAbortModal] = useState(false)
-  const [cancelNotificationSent, setCancelNotificationSent] = useState(false)
+  const cancelNotificationSentRef = useRef(false)
   const [userCancelled, setUserCancelled] = useState(false)
   
   useEffect(() => {
@@ -285,9 +269,8 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       e.preventDefault()
       e.returnValue = ''
-      // Sofort Backend informieren (nur einmal)
-      if (!cancelNotificationSent) {
-        setCancelNotificationSent(true)
+      if (!cancelNotificationSentRef.current) {
+        cancelNotificationSentRef.current = true
         navigator.sendBeacon(`/api/search-prices/cancel-search`, JSON.stringify({ 
           sessionId, 
           reason: 'page_unload' 
@@ -298,9 +281,8 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
     }
 
     const handleVisibilityChange = () => {
-      if (document.hidden && isStreaming && sessionId && !cancelNotificationSent) {
-        // Sofort Backend informieren (nur einmal)
-        setCancelNotificationSent(true)
+      if (document.hidden && isStreaming && sessionId && !cancelNotificationSentRef.current) {
+        cancelNotificationSentRef.current = true
         fetch(`/api/search-prices/cancel-search`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -320,17 +302,14 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
     }
   }, [isStreaming, sessionId])
 
-  // Wenn das Abbruch-Popup angezeigt wird, Suche abbrechen (wie bei manuellem Abbruch)
   useEffect(() => {
     if (showAbortModal && onCancelSearch) {
       onCancelSearch()
     }
   }, [showAbortModal, onCancelSearch])
 
-  // Timer für vergangene Zeit
   useEffect(() => {
     if (!isStreaming) return
-    setElapsed(0)
     const interval = setInterval(() => {
       setElapsed(Math.floor((Date.now() - startTime) / 1000))
     }, 1000)
@@ -366,13 +345,11 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
         })
       }
 
-      // Schedule next poll only if still polling
       if (pollingRef.current) {
         setTimeout(pollProgress, 1000)
       }
     }
 
-    // Start initial poll
     pollProgress()
 
     return () => {
@@ -386,18 +363,25 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
   const progressPercentage = totalDays > 0 ? Math.round((completedDays / totalDays) * 100) : 0
   const displayProgress = (!isStreaming || isCompleteNow) ? 100 : progressPercentage
 
-  // Stoppe Polling sofort, wenn alle Tage fertig sind (auch wenn isStreaming noch true ist)
   useEffect(() => {
     if (isStreaming && isCompleteNow) {
       pollingRef.current = false
     }
   }, [isStreaming, isCompleteNow])
 
-  // Verwende echte ETA von Progress-API oder realistischen Fallback
+  if (resultDates.length === 0 && !isStreaming) {
+    return (
+      <div className="text-center py-8 text-gray-500">
+        Keine Suchergebnisse verfügbar. Bitte starte eine neue Suche.
+      </div>
+    )
+  }
+
+  if (dates.length === 0 && expectedDateRange.length === 0) return null
+
   const estimatedTimeRemaining = isStreaming ? (
     progressData.estimatedTimeRemaining || 
-    // Fallback: Realistische Schätzung basierend auf verbleibenden Tagen
-    Math.max(1, Math.min((totalDays - completedDays) * 1.5, 60)) // Max 1 Minute als Fallback
+    Math.max(1, Math.min((totalDays - completedDays) * 1.5, 60))
   ) : 0
 
   const formatTime = (seconds: number) => {

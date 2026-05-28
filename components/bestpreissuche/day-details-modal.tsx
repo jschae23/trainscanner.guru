@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { flushSync } from "react-dom" // Import flushSync
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
@@ -211,6 +211,13 @@ export function DayDetailsModal({
     })
   }
 
+  // Zeitbasis für Datenalter (aktualisiert minütlich)
+  const [now, setNow] = useState(() => Date.now())
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 60000)
+    return () => clearInterval(timer)
+  }, [])
+
   if (!date || !data) return null
 
   const dateObj = new Date(date)
@@ -284,7 +291,6 @@ export function DayDetailsModal({
   const getDataAgeInfo = () => {
     if (!data?.recordedAt) return null
     
-    const now = Date.now()
     const age = now - data.recordedAt
     const ageMinutes = Math.floor(age / 60000)
     const ageHours = Math.floor(ageMinutes / 60)

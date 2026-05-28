@@ -104,14 +104,14 @@ export default function DebugPage() {
       <div className="mt-8 text-sm text-gray-600 bg-yellow-50 p-4 rounded">
         <p className="font-bold mb-2">Debugging 422 Error:</p>
         <ol className="list-decimal list-inside space-y-1">
-          <li>Try "München" and "Berlin" first (major stations)</li>
-          <li>Test "Minimal Request" to see if basic structure works</li>
+          <li>Try &quot;München&quot; and &quot;Berlin&quot; first (major stations)</li>
+          <li>Test &quot;Minimal Request&quot; to see if basic structure works</li>
           <li>Compare the request structures between working and failing calls</li>
           <li>Check server console for detailed logs</li>
           <li>Look for differences in station ID format or request parameters</li>
         </ol>
         <p className="mt-3 font-medium">
-          The minimal test strips down to the absolute basics to isolate what's causing the 422 error.
+          The minimal test strips down to the absolute basics to isolate what&apos;s causing the 422 error.
         </p>
       </div>
     </div>

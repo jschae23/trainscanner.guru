@@ -221,6 +221,8 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
   }, [reisezeitraumAb, reisezeitraumBis, selectedWeekdays])
 
   // Fetch station suggestions with retry logic
+  const fetchStationSuggestionsRef = useRef<((query: string, type: 'start' | 'ziel', retryCount?: number) => Promise<void>) | null>(null)
+
   const fetchStationSuggestions = useCallback(async (query: string, type: 'start' | 'ziel', retryCount = 0) => {
     const maxRetries = 3
     
@@ -264,7 +266,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
           
           // Retry after delay
           await new Promise(resolve => setTimeout(resolve, retryAfter))
-          return fetchStationSuggestions(query, type, retryCount + 1)
+          return fetchStationSuggestionsRef.current?.(query, type, retryCount + 1)
         } else {
           throw new Error('Rate limit exceeded. Bitte versuche es in einigen Sekunden erneut.')
         }
@@ -304,6 +306,10 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
       }
     }
   }, [])
+
+  useEffect(() => {
+    fetchStationSuggestionsRef.current = fetchStationSuggestions
+  }, [fetchStationSuggestions])
   
   // Handle input changes with debounce
   const handleStartInput = useCallback((value: string) => {
@@ -483,7 +489,9 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
       params.set("wochentage", sortedWeekdays.join(','))
     }
     
-    window.location.href = `/?${params.toString()}`
+    if (typeof window !== 'undefined') {
+      window.location.assign(`/?${params.toString()}`)
+    }
   }
 
   const handleReset = () => {

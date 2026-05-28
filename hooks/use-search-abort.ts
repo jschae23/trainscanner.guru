@@ -1,17 +1,19 @@
 // Erstelle eine einfache Abbruch-Hook für die Search-Funktionalität
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export function useSearchAbort(sessionId: string | null, onAbort?: () => void) {
   const abortedRef = useRef(false)
+  const [isAborted, setIsAborted] = useState(false)
 
-  const abortSearch = async () => {
+  const abortSearch = useCallback(async () => {
     if (!sessionId || abortedRef.current) return
 
     try {
       abortedRef.current = true
-      
+      setIsAborted(true)
+
       // Sende Abbruch-Signal an Server
       await fetch(`/api/search-progress?sessionId=${sessionId}`, {
         method: 'DELETE',
@@ -23,7 +25,7 @@ export function useSearchAbort(sessionId: string | null, onAbort?: () => void) {
     } catch (error) {
       console.error('Fehler beim Abbrechen der Suche:', error)
     }
-  }
+  }, [sessionId, onAbort])
 
   // Automatisches Abbrechen beim Verlassen der Seite
   useEffect(() => {
@@ -32,7 +34,7 @@ export function useSearchAbort(sessionId: string | null, onAbort?: () => void) {
     const handleBeforeUnload = () => {
       if (!abortedRef.current) {
         // Verwende sendBeacon für zuverlässige Übertragung beim Seitenverlassen
-        navigator.sendBeacon(`/api/search-progress?sessionId=${sessionId}`, 
+        navigator.sendBeacon(`/api/search-progress?sessionId=${sessionId}`,
           JSON.stringify({ method: 'DELETE' }))
       }
     }
@@ -50,7 +52,7 @@ export function useSearchAbort(sessionId: string | null, onAbort?: () => void) {
       window.removeEventListener('beforeunload', handleBeforeUnload)
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
-  }, [sessionId])
+  }, [sessionId, abortSearch])
 
-  return { abortSearch, isAborted: abortedRef.current }
+  return { abortSearch, isAborted }
 }

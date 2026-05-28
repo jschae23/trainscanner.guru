@@ -82,7 +82,7 @@ export function TrainResults({ searchParams }: TrainResultsProps) {
   const [isStreaming, setIsStreaming] = useState(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null)
   const calendarRef = useRef<HTMLDivElement>(null)
-  const [hasScrolledToCalendar, setHasScrolledToCalendar] = useState(false)
+  const hasScrolledRef = useRef(false)
   const [sessionCompleted, setSessionCompleted] = useState(false)
 
   // Calculate expected days from weekdays
@@ -437,6 +437,7 @@ export function TrainResults({ searchParams }: TrainResultsProps) {
     searchParams.ankunftBis,
     searchParams.wochentage, // Changed from 'tage'
     searchParams.umstiegszeit,
+    expectedDays,
   ])
 
   // --- Tag-Navigation für Modal und Kalender ---
@@ -462,21 +463,21 @@ export function TrainResults({ searchParams }: TrainResultsProps) {
 
   useEffect(() => {
     // Sobald der Kalender sichtbar ist (auch beim Laden), einmalig scrollen
-    if (!hasScrolledToCalendar && calendarRef.current && (loading || isStreaming || validPriceResults.length > 0)) {
+    if (!hasScrolledRef.current && calendarRef.current && (loading || isStreaming || validPriceResults.length > 0)) {
       calendarRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
-      setHasScrolledToCalendar(true)
+      hasScrolledRef.current = true
     }
-  }, [loading, isStreaming, hasScrolledToCalendar, validPriceResults.length])
+  }, [loading, isStreaming, validPriceResults.length])
+
+  // Reset scroll-Flag, wenn neue Suche gestartet wird
+  useEffect(() => {
+    hasScrolledRef.current = false
+  }, [currentSearchKey])
 
   // Show nothing if no search params
   if (!searchParams.start || !searchParams.ziel) {
     return null
   }
-
-  // Reset scroll-Flag, wenn neue Suche gestartet wird
-  useEffect(() => {
-    setHasScrolledToCalendar(false)
-  }, [currentSearchKey])
 
   // Always show calendar when search is active or has results
   if (!loading && !isStreaming && (!validPriceResults || validPriceResults.length === 0)) {

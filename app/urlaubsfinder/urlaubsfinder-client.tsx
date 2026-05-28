@@ -161,12 +161,12 @@ export default function UrlauberfinderPage({ showFooter = false }: Urlauberfinde
   } | null>(null)
   const abortControllerRef = useRef<AbortController | null>(null)
   const abortReasonRef = useRef<'manual' | 'auto' | null>(null)
-  const [initialFormParams, setInitialFormParams] = useState<Partial<UrlauberfinderSearchParams>>({})
-
-  useEffect(() => {
-    const parsed = parseUrlaubsfinderQuery(new URLSearchParams(window.location.search))
-    setInitialFormParams(parsed)
-  }, [])
+  const [initialFormParams] = useState<Partial<UrlauberfinderSearchParams>>(() => {
+    if (typeof window !== 'undefined') {
+      return parseUrlaubsfinderQuery(new URLSearchParams(window.location.search))
+    }
+    return {}
+  })
 
   const handleSearch = async (params: UrlauberfinderSearchParams) => {
     try {

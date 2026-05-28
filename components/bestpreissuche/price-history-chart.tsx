@@ -34,16 +34,11 @@ function getTrend(history: PriceHistoryEntry[]) {
 
 // Wrap component with React.memo to prevent re-renders if props haven't changed
 export const PriceHistoryChart = memo(function PriceHistoryChart({ history, title }: PriceHistoryChartProps) {
-  if (!history || history.length < 1) {
-    return (
-      <div className="text-center text-sm text-gray-500 py-4">
-        Keine Preishistorie vorhanden.
-      </div>
-    )
-  }
-
   // Memoize chart data and trend calculation to avoid re-computing on every render
   const { data, hasMultipleEntriesPerDay, trend, minPrice, maxPrice } = useMemo(() => {
+    if (!history || history.length < 1) {
+      return { data: [], hasMultipleEntriesPerDay: false, trend: null, minPrice: 0, maxPrice: 0 }
+    }
     // Prüfe ob mehrere Einträge am selben Tag existieren
     const dates = history.map(entry => new Date(entry.recorded_at).toLocaleDateString('de-DE'))
     const uniqueDates = new Set(dates)
@@ -66,6 +61,13 @@ export const PriceHistoryChart = memo(function PriceHistoryChart({ history, titl
     return { data, hasMultipleEntriesPerDay, trend, minPrice, maxPrice }
   }, [history])
 
+  if (!history || history.length < 1) {
+    return (
+      <div className="text-center text-sm text-gray-500 py-4">
+        Keine Preishistorie vorhanden.
+      </div>
+    )
+  }
 
   // Runde die Y-Achsen-Domain, um unschöne Nachkommastellen zu vermeiden
   const yDomain = [

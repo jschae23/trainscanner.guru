@@ -488,7 +488,8 @@ export function UrlauberfinderResults({
   onCancel,
 }: UrlauberfinderResultsProps) {
   const [mapSelected, setMapSelected] = useState<DestinationResult | null>(null)
-  const [expandedDestination, setExpandedDestination] = useState<string | null>(null)
+  const [cardExpandedDestination, setCardExpandedDestination] = useState<string | null>(null)
+  const expandedDestination = mapSelected ? mapSelected.destination : cardExpandedDestination
 
   const minPrice =
     results.length > 0 ? Math.min(...results.map((r) => r.totalPrice)) : 0
@@ -511,7 +512,6 @@ export function UrlauberfinderResults({
     const card = document.getElementById(cardId)
     if (!card) return
 
-    setExpandedDestination(mapSelected.destination)
     card.scrollIntoView({ behavior: "smooth", block: "center" })
   }, [mapSelected])
 
@@ -645,7 +645,7 @@ export function UrlauberfinderResults({
                   onMapFocus={setMapSelected}
                   isExpanded={expandedDestination === result.destination}
                   onToggle={() =>
-                    setExpandedDestination((prev) =>
+                    setCardExpandedDestination((prev) =>
                       prev === result.destination ? null : result.destination
                     )
                   }
