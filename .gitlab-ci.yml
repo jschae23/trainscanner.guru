@@ -1,0 +1,52 @@
+variables:
+  DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+  DOCKER_IMAGE_LATEST: $CI_REGISTRY_IMAGE:latest
+  DOCKER_IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+
+stages:
+  - lint
+  - build
+  - publish
+
+lint:
+  stage: lint
+  image: node:24-bookworm-slim
+  before_script:
+    - corepack enable
+    - pnpm install --frozen-lockfile
+  script:
+    - pnpm lint
+  cache:
+    key: pnpm
+    paths:
+      - node_modules/
+
+build:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  script:
+    - /kaniko/executor
+      --context=$CI_PROJECT_DIR
+      --dockerfile=$CI_PROJECT_DIR/Dockerfile
+      --destination=$DOCKER_IMAGE
+      --destination=$DOCKER_IMAGE_LATEST
+      --cache=true
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+publish:
+  stage: publish
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  script:
+    - /kaniko/executor
+      --context=$CI_PROJECT_DIR
+      --dockerfile=$CI_PROJECT_DIR/Dockerfile
+      --destination=$DOCKER_IMAGE_TAG
+      --destination=$DOCKER_IMAGE_LATEST
+      --cache=true
+  rules:
+    - if: $CI_COMMIT_TAG

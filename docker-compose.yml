@@ -1,0 +1,21 @@
+services:
+  app:
+    image: registry.gitlab.com/jschae23/trainscanner.guru:latest
+    container_name: trainscanner-guru
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+      - NEXT_PUBLIC_BASE_URL=http://localhost:3000
+      - LOG_LEVEL=
+      - ENABLE_URLAUBSFINDER=true
+      - SHOW_FOOTER=false
+      - ALLOWED_METRICS_IPS=
+      - METRICS_API_KEY=
+      - CLEANUP_PAST_CONNECTIONS=true
+      - RL_SUSTAINED_INTERVAL_MS=2000
+      - RL_SUSTAINED_COUNT=25
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
