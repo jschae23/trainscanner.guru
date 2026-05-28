@@ -619,7 +619,7 @@ class GlobalRateLimiter {
     }
     
     const logCancellation = reason === "user_request" ? logInfo : logDebug
-    logCancellation(LOG_SCOPE, "🛑 Session cancellation requested", {
+    logCancellation(LOG_SCOPE, "Session cancellation requested", {
       sessionId,
       reason,
     })

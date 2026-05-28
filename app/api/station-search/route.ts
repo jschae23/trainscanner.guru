@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     const cachedResults = getCachedStationSearch(normalizedQuery)
     if (cachedResults) {
       metricsCollector.recordCacheHit('station')
-      logDebug(LOG_SCOPE, "🚉 Station search cache hit", {
+      logDebug(LOG_SCOPE, "Station search cache hit", {
         query: normalizedQuery,
         resultCount: cachedResults.length,
         topResult: cachedResults[0]?.name,
@@ -40,7 +40,7 @@ export async function GET(request: NextRequest) {
     
     // Use global rate limiter instead of separate token bucket
     metricsCollector.recordCacheMiss('station')
-    logDebug(LOG_SCOPE, "🔍 Station search cache miss; fetching from Bahn API", {
+    logDebug(LOG_SCOPE, "Station search cache miss; fetching from Bahn API", {
       query: normalizedQuery,
     })
     
@@ -172,7 +172,7 @@ export async function POST(request: NextRequest) {
     })
     metricsCollector.recordStationSearchClick()
 
-    logDebug(LOG_SCOPE, "👆 Station search click recorded", {
+    logDebug(LOG_SCOPE, "Station search click recorded", {
       query,
       stationName: station.name,
       stationId: station.extId,

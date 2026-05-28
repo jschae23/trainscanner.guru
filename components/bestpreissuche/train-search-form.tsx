@@ -12,7 +12,7 @@ import { logError } from "@/lib/shared/logger"
 const LOG_SCOPE = "bestpreissuche.search-form"
 
 /**
- * \u26a0\ufe0f WHY inputs looked huge on mobile (esp. iOS Safari)
+ * WHY inputs looked huge on mobile (esp. iOS Safari)
  * - Native <input type="date"|"time"> impose their own minimum height and UI.
  * - iOS zooms inputs whose font-size < 16px.
  * - Radix SelectTrigger / shadcn Input had differing default heights.

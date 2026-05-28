@@ -505,7 +505,7 @@ export function TrainResults({ searchParams }: TrainResultsProps) {
         {/* Calendar View */}
         <div ref={calendarRef}>
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-            📅 Preiskalender
+            Preiskalender
             <span className="text-sm font-normal text-gray-500">(Klicken zum Buchen)</span>
           </h3>
           <PriceCalendar

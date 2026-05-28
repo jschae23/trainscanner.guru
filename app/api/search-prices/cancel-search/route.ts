@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     globalRateLimiter.cancelSession(sessionId, reason)
     
     const logCancel = reason === "user_request" ? logInfo : logDebug
-    logCancel(LOG_SCOPE, "🛑 Search cancellation requested", {
+    logCancel(LOG_SCOPE, "Search cancellation requested", {
       sessionId,
       reason,
     })
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
           activeRequests: 0,
         }),
       })
-      logDebug(LOG_SCOPE, "✅ Progress marked complete after cancellation", { sessionId })
+      logDebug(LOG_SCOPE, "Progress marked complete after cancellation", { sessionId })
     } catch (progressError) {
       logWarn(LOG_SCOPE, "Could not mark progress complete after cancellation", {
         sessionId,

@@ -113,7 +113,7 @@ export function RecommendationCards({
                 </Badge>
               </PopoverTrigger>
               <PopoverContent className="max-w-sm text-sm">
-                <div className="font-semibold mb-2 text-amber-800">🧠 Intelligente Empfehlung</div>
+                <div className="font-semibold mb-2 text-amber-800">Intelligente Empfehlung</div>
                 <div className="space-y-2">
                   <div>Unser Algorithmus bewertet alle Verbindungen nach:</div>
                   <ul className="list-disc list-inside space-y-1 text-xs text-gray-600">

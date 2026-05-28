@@ -106,7 +106,7 @@ export default function UrlauberfinderMap({
                 </div>
                 {isCheapest && (
                   <div className="absolute -top-2 -right-2 bg-yellow-300 rounded-full w-6 h-6 flex items-center justify-center text-xs">
-                    🏆
+                    *
                   </div>
                 )}
               </div>

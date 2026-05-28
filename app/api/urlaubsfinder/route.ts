@@ -180,7 +180,7 @@ export async function POST(request: NextRequest) {
 
     metricsCollector.recordUrlaubsfinderSearch(destinations.length)
 
-    logInfo(LOG_SCOPE, "🏖️ Urlaubsfinder gestartet", {
+    logInfo(LOG_SCOPE, "Urlaubsfinder gestartet", {
       homeStation,
       destinationCount: destinations.length,
       outwardDate,
@@ -232,7 +232,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    logDebug(LOG_SCOPE, "📍 Urlaubsfinder stations resolved", {
+    logDebug(LOG_SCOPE, "Urlaubsfinder stations resolved", {
       homeStation: homeStationData.name,
       homeStationId: homeStationData.normalizedId,
       requestedDestinationCount: destinations.length,
@@ -446,7 +446,7 @@ export async function POST(request: NextRequest) {
         // Sort by total price
         results.sort((a, b) => a.totalPrice - b.totalPrice)
 
-        logInfo(LOG_SCOPE, "✅ Urlaubsfinder abgeschlossen", {
+        logInfo(LOG_SCOPE, "Urlaubsfinder abgeschlossen", {
           outwardDate,
           returnDate,
           foundDestinations: results.length,

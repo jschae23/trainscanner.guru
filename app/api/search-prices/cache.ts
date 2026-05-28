@@ -311,7 +311,7 @@ export function getCachedResult(cacheKey: string): { data: TrainResults | null; 
     const data = decompressData(row.data_compressed)
     
     if (needsRefresh) {
-      logDebug(LOG_SCOPE, "♻️ Connection cache entry exists but is stale", {
+      logDebug(LOG_SCOPE, "Connection cache entry exists but is stale", {
         ageMinutes: Math.round(age / 60000),
         freshnessTtlMinutes: Math.round(CACHE_FRESHNESS_TTL / 60000),
       })
@@ -413,7 +413,7 @@ export function setCachedResult(
     const historyCount = (stmtGetHistoryCount.get() as { count: number }).count
     
     if (cacheCount % 50 === 0 || cacheCount < 10) {
-      logDebug(LOG_SCOPE, "💾 Connection cache stored", {
+      logDebug(LOG_SCOPE, "Connection cache stored", {
         travelDate: params.date,
         startStationId: params.startStationId,
         destinationStationId: params.zielStationId,
@@ -703,7 +703,7 @@ export function setCachedStation(search: string, data: { id: string; normalizedI
   
   setCachedStationSearch(search, [result])
   
-  logDebug(LOG_SCOPE, "💾 Station lookup cached", {
+  logDebug(LOG_SCOPE, "Station lookup cached", {
     query: search,
     stationName: data.name,
     stationId: data.normalizedId,

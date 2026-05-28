@@ -55,7 +55,7 @@ export async function searchBahnhof(search: string): Promise<{ id: string; norma
     const url = `https://www.bahn.de/web/api/reiseloesung/orte?suchbegriff=${encodedSearch}&typ=ALL&limit=10`
     const stationApiStartTime = Date.now()
 
-    logDebug(LOG_SCOPE, "🌐 Station lookup via Bahn API started", { query: search })
+    logDebug(LOG_SCOPE, "Station lookup via Bahn API started", { query: search })
 
     let response: Response
     try {
@@ -88,7 +88,7 @@ export async function searchBahnhof(search: string): Promise<{ id: string; norma
     // Normalisiere die Station-ID: Entferne den Timestamp-Parameter @p=
     const normalizedId = originalId.replace(/@p=\d+@/g, '@')
 
-    logDebug(LOG_SCOPE, "✅ Station lookup resolved", {
+    logDebug(LOG_SCOPE, "Station lookup resolved", {
       query: search,
       stationName: station.name,
       stationId: normalizedId,
@@ -301,7 +301,7 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
         return interval.umstiegsAnzahl <= Number(config.maximaleUmstiege)
       })
       
-      logDebug(LOG_SCOPE, "📦 Connection cache hit; returning filtered cached offers", {
+      logDebug(LOG_SCOPE, "Connection cache hit; returning filtered cached offers", {
         ...routeContext(config, tag),
         cachedIntervals: cachedData.allIntervals.length,
         afterTimeFilter: filteredIntervals.length,
@@ -372,7 +372,7 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
     }
     if (cachedData?.allIntervals && !hasUsableIntervalTimes(cachedData)) {
       refreshMalformedCache = true
-      logDebug(LOG_SCOPE, "♻️ Connection cache entry has no journey times; refreshing from Bahn API", {
+      logDebug(LOG_SCOPE, "Connection cache entry has no journey times; refreshing from Bahn API", {
         ...routeContext(config, tag),
         cachedIntervals: cachedData.allIntervals.length,
       })
@@ -426,9 +426,9 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
     metricsCollector.recordCacheStale('connection')
   } else if (cachedResult.data && cachedResult.needsRefresh) {
     metricsCollector.recordCacheStale('connection')
-    logDebug(LOG_SCOPE, "♻️ Connection cache entry stale; refreshing from Bahn API", routeContext(config, tag))
+    logDebug(LOG_SCOPE, "Connection cache entry stale; refreshing from Bahn API", routeContext(config, tag))
   } else {
-    logDebug(LOG_SCOPE, "🌐 Connection cache miss; fetching from Bahn API", routeContext(config, tag))
+    logDebug(LOG_SCOPE, "Connection cache miss; fetching from Bahn API", routeContext(config, tag))
     metricsCollector.recordCacheMiss('connection')
   }
 
@@ -477,7 +477,7 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
         throw new Error(`Session ${sessionId} was cancelled`)
       }
       
-      logDebug(LOG_SCOPE, "🌐 Bahn price API request started", {
+      logDebug(LOG_SCOPE, "Bahn price API request started", {
         ...routeContext(config, tag),
         requestId,
       })
@@ -558,7 +558,7 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
 
     // Check if response contains error message
     if (responseText.includes("Preisauskunft nicht möglich")) {
-      logDebug(LOG_SCOPE, "ℹ️ Bahn price API has no price information for travel date", routeContext(config, tag))
+      logDebug(LOG_SCOPE, "Bahn price API has no price information for travel date", routeContext(config, tag))
       const result = { [tag]: { preis: 0, info: "Kein Bestpreis verfügbar!", abfahrtsZeitpunkt: "", ankunftsZeitpunkt: "" } }
       setCachedResult(cacheKey, result, {
         startStationId: config.startStationNormalizedId,
@@ -591,7 +591,7 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
     }
 
     if (!data || !data.intervalle) {
-      logDebug(LOG_SCOPE, "ℹ️ Bahn price API response contained no intervals", routeContext(config, tag))
+      logDebug(LOG_SCOPE, "Bahn price API response contained no intervals", routeContext(config, tag))
       const result = { [tag]: { preis: 0, info: "Keine Intervalle gefunden!", abfahrtsZeitpunkt: "", ankunftsZeitpunkt: "" } }
       setCachedResult(cacheKey, result, {
         startStationId: config.startStationNormalizedId,
@@ -607,7 +607,7 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
       return { result, wasApiCall: true, recordedAt: Date.now() }
     }
 
-    logDebug(LOG_SCOPE, "📥 Bahn price API response parsed", {
+    logDebug(LOG_SCOPE, "Bahn price API response parsed", {
       ...routeContext(config, tag),
       rawIntervals: data.intervalle.length,
     })
@@ -666,7 +666,7 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
     }
 
     if (skippedTeilpreisOffers > 0) {
-      logDebug(LOG_SCOPE, "🚫 Ignored partial-price offers without reliable total fare", {
+      logDebug(LOG_SCOPE, "Ignored partial-price offers without reliable total fare", {
         ...routeContext(config, tag),
         skippedOffers: skippedTeilpreisOffers,
       })
@@ -746,7 +746,7 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
       return interval.umstiegsAnzahl <= Number(config.maximaleUmstiege)
     })
 
-    logDebug(LOG_SCOPE, "🔍 Bahn API offers filtered for request", {
+    logDebug(LOG_SCOPE, "Bahn API offers filtered for request", {
       ...routeContext(config, tag),
       rawOffers: finalAllIntervals.length,
       afterTimeFilter: timeFilteredIntervals.length,
@@ -755,7 +755,7 @@ export async function getBestPrice(config: any): Promise<{ result: TrainResults 
     })
 
     if (umstiegsFilteredIntervals.length === 0) {
-      logDebug(LOG_SCOPE, "ℹ️ No offers remain after request filters", routeContext(config, tag))
+      logDebug(LOG_SCOPE, "No offers remain after request filters", routeContext(config, tag))
       // Auch für leere Ergebnisse die Historie mit Zeitfiltern
       const emptyDayHistory = getDayPriceHistory({
         startStationId: config.startStationNormalizedId,

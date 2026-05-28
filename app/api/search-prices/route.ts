@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     metricsCollector.recordUserSearch(calculatedDates.length)
     metricsCollector.recordStreamingConnection()
 
-    logDebug(LOG_SCOPE, "📥 Bestpreissuche request received", {
+    logDebug(LOG_SCOPE, "Bestpreissuche request received", {
       requestedStart: start,
       requestedDestination: ziel,
       fromDate: reisezeitraumAb,
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
         if (!startStation || !zielStation) {
       return NextResponse.json(
         {
-          error: `Station not found. Start: ${startStation ? "✓" : "✗"}, Ziel: ${zielStation ? "✓" : "✗"}`,
+          error: `Station not found. Start: ${startStation ? "OK" : "NO"}, Ziel: ${zielStation ? "OK" : "NO"}`,
         },
         { status: 404 },
       )
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
 
     // Verwende die übergebene sessionId oder generiere eine neue
     const sessionId = providedSessionId || crypto.randomUUID()
-    logInfo(LOG_SCOPE, "🚂 Bestpreissuche gestartet", {
+    logInfo(LOG_SCOPE, "Bestpreissuche gestartet", {
       sessionId,
       route: `${startStation.name} -> ${zielStation.name}`,
       fromDate: reisezeitraumAb,
@@ -230,7 +230,7 @@ export async function POST(request: NextRequest) {
             plannedDays: maxDays
           }
 
-          logInfo(LOG_SCOPE, "✅ Bestpreissuche abgeschlossen", {
+          logInfo(LOG_SCOPE, "Bestpreissuche abgeschlossen", {
             sessionId,
             route: `${startStation.name} -> ${zielStation.name}`,
             processedDays,
@@ -254,7 +254,7 @@ export async function POST(request: NextRequest) {
             wochentage || [1, 2, 3, 4, 5, 6, 0]
           ).slice(0, 30) // Limit to max 30 days
           maxDays = datesToProcess.length
-          logDebug(LOG_SCOPE, "📅 Bestpreissuche date processing started", {
+          logDebug(LOG_SCOPE, "Bestpreissuche date processing started", {
             sessionId,
             plannedDays: datesToProcess.length,
             firstTravelDate: datesToProcess[0],
@@ -523,7 +523,7 @@ export async function POST(request: NextRequest) {
                   
                   // Final count
                   const markedCount = priceData.allIntervals.filter(i => i.isCheapestPerInterval === true).length
-                  logDebug(LOG_SCOPE, "🏁 Bestpreissuche day result prepared", {
+                  logDebug(LOG_SCOPE, "Bestpreissuche day result prepared", {
                     sessionId,
                     travelDate: dateKey,
                     totalIntervals: priceData.allIntervals.length,

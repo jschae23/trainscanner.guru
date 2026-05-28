@@ -185,14 +185,6 @@ export function UrlauberfinderSearchForm({
     })
   }, [])
 
-  const germanRegionsSorted = Array.from(
-    new Set(
-      ICE_STATIONS
-        .filter((s) => s.region !== "Europa" && !s.isDefault)
-        .map((s) => s.region)
-    )
-  ).sort((a, b) => a.localeCompare(b, "de"))
-
   const homeInputRef = useRef<HTMLInputElement>(null)
   const homeSuggestionsRef = useRef<HTMLDivElement>(null)
   const homeDebounceRef = useRef<NodeJS.Timeout | undefined>(undefined)
@@ -495,35 +487,35 @@ export function UrlauberfinderSearchForm({
               onClick={() => togglePreset(ICE_STATIONS.filter(s => s.isDefault).map(s => s.name))}
               className="text-xs px-2.5 py-1 rounded-full border border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100 font-medium transition-colors"
             >
-              🏙 Großstädte
+              Großstädte
             </button>
             <button
               type="button"
               onClick={() => togglePreset(CURATED_SMALL_CITIES_PRESET.filter(name => ICE_STATIONS.some(s => s.name === name)))}
               className="text-xs px-2.5 py-1 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-medium transition-colors"
             >
-              🌳 Kleinere Städte (Top-Auswahl)
+              Kleinere Städte (Top-Auswahl)
             </button>
             <button
               type="button"
               onClick={() => togglePreset(ICE_STATIONS.filter(s => s.region === "Europa").map(s => s.name))}
               className="text-xs px-2.5 py-1 rounded-full border border-purple-300 bg-purple-50 text-purple-700 hover:bg-purple-100 font-medium transition-colors"
             >
-              🌍 Europäische Ziele
+              Europäische Ziele
             </button>
             <button
               type="button"
               onClick={() => togglePreset(ICE_STATIONS.map(s => s.name))}
               className="text-xs px-2.5 py-1 rounded-full border border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100 font-medium transition-colors"
             >
-              ✓ Alle
+              Alle
             </button>
             <button
               type="button"
               onClick={() => setSelectedDestinations([])}
               className="text-xs px-2.5 py-1 rounded-full border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 font-medium transition-colors"
             >
-              ✗ Keine
+              Keine
             </button>
           </div>
 
@@ -532,7 +524,7 @@ export function UrlauberfinderSearchForm({
             {/* Großstädte */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">🏙 Großstädte</h4>
+                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Großstädte</h4>
                 <button
                   type="button"
                   onClick={() => {
@@ -570,14 +562,14 @@ export function UrlauberfinderSearchForm({
               </div>
             </div>
 
-            {/* Europäische Ziele */}
+            {/* Europäische Ziele (große Städte) */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <h4 className="text-xs font-bold text-purple-500 uppercase tracking-wider">🌍 Europäische Ziele</h4>
+                <h4 className="text-xs font-bold text-purple-500 uppercase tracking-wider">Europäische Ziele</h4>
                 <button
                   type="button"
                   onClick={() => {
-                    const names = ICE_STATIONS.filter(s => s.region === "Europa").map(s => s.name)
+                    const names = ICE_STATIONS.filter(s => s.region === "Europa" && !s.isMinorEuropean).map(s => s.name)
                     const allSelected = names.every(n => selectedDestinations.includes(n))
                     if (allSelected) setSelectedDestinations(prev => prev.filter(n => !names.includes(n)))
                     else setSelectedDestinations(prev => [...new Set([...prev, ...names])])
@@ -588,7 +580,7 @@ export function UrlauberfinderSearchForm({
                 </button>
               </div>
               <div className="flex flex-wrap gap-1.5">
-                {ICE_STATIONS.filter(s => s.region === "Europa").map(station => {
+                {ICE_STATIONS.filter(s => s.region === "Europa" && !s.isMinorEuropean).map(station => {
                   const checked = selectedDestinations.includes(station.name)
                   return (
                     <button
@@ -611,52 +603,87 @@ export function UrlauberfinderSearchForm({
               </div>
             </div>
 
-            {/* Weitere deutsche Städte – nach Region */}
-            {germanRegionsSorted.map(region => {
-              const stations = ICE_STATIONS.filter(s => !s.isDefault && s.region === region)
-              if (stations.length === 0) return null
-              return (
-                <div key={region}>
-                  <div className="flex items-center justify-between mb-1.5">
-                    <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">{region}</h4>
+            {/* Weitere Europäische Ziele (kleinere Städte) */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-wider">Weitere Europäische Ziele</h4>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const names = ICE_STATIONS.filter(s => s.region === "Europa" && s.isMinorEuropean).map(s => s.name)
+                    const allSelected = names.every(n => selectedDestinations.includes(n))
+                    if (allSelected) setSelectedDestinations(prev => prev.filter(n => !names.includes(n)))
+                    else setSelectedDestinations(prev => [...new Set([...prev, ...names])])
+                  }}
+                  className="text-[10px] text-indigo-500 hover:text-indigo-700 font-semibold"
+                >
+                  alle ±
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {ICE_STATIONS.filter(s => s.region === "Europa" && s.isMinorEuropean).map(station => {
+                  const checked = selectedDestinations.includes(station.name)
+                  return (
                     <button
+                      key={station.name}
                       type="button"
                       onClick={() => {
-                        const names = stations.map(s => s.name)
-                        const allSelected = names.every(n => selectedDestinations.includes(n))
-                        if (allSelected) setSelectedDestinations(prev => prev.filter(n => !names.includes(n)))
-                        else setSelectedDestinations(prev => [...new Set([...prev, ...names])])
+                        if (checked) setSelectedDestinations(prev => prev.filter(n => n !== station.name))
+                        else setSelectedDestinations(prev => [...prev, station.name])
                       }}
-                      className="text-[10px] text-blue-600 hover:text-blue-800 font-semibold"
+                      className={`text-xs px-2.5 py-1 rounded-full border font-medium transition-all ${
+                        checked
+                          ? "bg-indigo-500 text-white border-indigo-500"
+                          : "bg-white text-gray-600 border-indigo-200 hover:border-indigo-400 hover:text-indigo-600"
+                      }`}
                     >
-                      alle ±
+                      {station.displayName}
                     </button>
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {stations.map(station => {
-                      const checked = selectedDestinations.includes(station.name)
-                      return (
-                        <button
-                          key={station.name}
-                          type="button"
-                          onClick={() => {
-                            if (checked) setSelectedDestinations(prev => prev.filter(n => n !== station.name))
-                            else setSelectedDestinations(prev => [...prev, station.name])
-                          }}
-                          className={`text-xs px-2.5 py-1 rounded-full border font-medium transition-all ${
-                            checked
-                              ? "bg-blue-600 text-white border-blue-600"
-                              : "bg-white text-gray-600 border-gray-300 hover:border-blue-400 hover:text-blue-600"
-                          }`}
-                        >
-                          {station.displayName.replace(" Hauptbahnhof", "")}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
-              )
-            })}
+                  )
+                })}
+              </div>
+            </div>
+
+            {/* Weitere deutsche Städte */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Weitere deutsche Städte</h4>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const names = ICE_STATIONS.filter(s => !s.isDefault && s.region !== "Europa").map(s => s.name)
+                    const allSelected = names.every(n => selectedDestinations.includes(n))
+                    if (allSelected) setSelectedDestinations(prev => prev.filter(n => !names.includes(n)))
+                    else setSelectedDestinations(prev => [...new Set([...prev, ...names])])
+                  }}
+                  className="text-[10px] text-blue-600 hover:text-blue-800 font-semibold"
+                >
+                  alle ±
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {ICE_STATIONS.filter(s => !s.isDefault && s.region !== "Europa").map(station => {
+                  const checked = selectedDestinations.includes(station.name)
+                  return (
+                    <button
+                      key={station.name}
+                      type="button"
+                      onClick={() => {
+                        if (checked) setSelectedDestinations(prev => prev.filter(n => n !== station.name))
+                        else setSelectedDestinations(prev => [...prev, station.name])
+                      }}
+                      className={`text-xs px-2.5 py-1 rounded-full border font-medium transition-all ${
+                        checked
+                          ? "bg-blue-600 text-white border-blue-600"
+                          : "bg-white text-gray-600 border-gray-300 hover:border-blue-400 hover:text-blue-600"
+                      }`}
+                    >
+                      {station.displayName.replace(" Hauptbahnhof", "")}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </div>
 
@@ -682,7 +709,7 @@ export function UrlauberfinderSearchForm({
           <div className={`grid grid-cols-1 gap-3 ${includeReturnDate ? "sm:grid-cols-2" : ""}`}>
             {/* Hinfahrt block */}
             <div className="min-w-0 overflow-hidden rounded-lg border border-blue-100 bg-blue-50/40 p-2 sm:p-3 space-y-2">
-              <p className="text-xs font-bold text-blue-700 uppercase tracking-wider mb-1">📍 Hinfahrt</p>
+              <p className="text-xs font-bold text-blue-700 uppercase tracking-wider mb-1">Hinfahrt</p>
               <div>
                 <Label htmlFor="outwardDate" className="text-xs font-medium text-gray-600 mb-1 block">Datum</Label>
                 <Input
@@ -752,7 +779,7 @@ export function UrlauberfinderSearchForm({
             {/* Rückfahrt block */}
             {includeReturnDate && (
               <div className="min-w-0 overflow-hidden rounded-lg border border-orange-100 bg-orange-50/40 p-2 sm:p-3 space-y-2">
-                <p className="text-xs font-bold text-orange-700 uppercase tracking-wider mb-1">↩️ Rückfahrt</p>
+                <p className="text-xs font-bold text-orange-700 uppercase tracking-wider mb-1">Rückfahrt</p>
                 <div>
                   <Label htmlFor="returnDate" className="text-xs font-medium text-gray-600 mb-1 block">Datum</Label>
                   <Input

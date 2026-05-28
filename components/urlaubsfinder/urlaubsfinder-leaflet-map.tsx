@@ -125,7 +125,7 @@ const DynamicLeaflet = dynamic(async () => {
         if (homeCoords?.lat && homeCoords?.lon) {
           const homeIcon = L.divIcon({
             html: `<div style="position:relative;display:inline-flex;flex-direction:column;align-items:center;cursor:pointer">
-              <div style="background:#2563eb;color:white;padding:4px 8px;border-radius:8px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.35);line-height:1.3">🏠 ${homeStation}</div>
+              <div style="background:#2563eb;color:white;padding:4px 8px;border-radius:8px;font-size:11px;font-weight:700;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,0.35);line-height:1.3">${homeStation}</div>
               <div style="width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #2563eb;margin-top:-1px"></div>
             </div>`,
             className: '',
@@ -151,7 +151,7 @@ const DynamicLeaflet = dynamic(async () => {
           if (pricePercent > 66) bgColor = '#ef4444' // red
           else if (pricePercent > 33) bgColor = '#f59e0b' // amber
 
-          const label = pricePercent < 33 ? '💰' : pricePercent < 66 ? '⚖️' : '❌'
+          const label = pricePercent < 33 ? '$' : pricePercent < 66 ? '=' : 'X'
 
           const icon = L.divIcon({
             html: `<div style="position:relative;display:inline-flex;flex-direction:column;align-items:center;cursor:pointer">
@@ -165,10 +165,10 @@ const DynamicLeaflet = dynamic(async () => {
           // Build popup HTML with details + a "Zur Liste" button
           const hasReturn = !!(dest.returnDeparture && dest.returnPrice)
           const outRow = dest.outwardDeparture
-            ? `<div style="margin:4px 0;font-size:12px;color:#1d4ed8">📍 Hin: ${fmt(dest.outwardDeparture)} → ${fmt(dest.outwardArrival)} · <b>${dest.outwardPrice.toFixed(0)} €</b></div>`
+            ? `<div style="margin:4px 0;font-size:12px;color:#1d4ed8">Hin: ${fmt(dest.outwardDeparture)} → ${fmt(dest.outwardArrival)} · <b>${dest.outwardPrice.toFixed(0)} €</b></div>`
             : ''
           const retRow = hasReturn
-            ? `<div style="margin:4px 0;font-size:12px;color:#c2410c">↩️ Rück: ${fmt(dest.returnDeparture!)} → ${fmt(dest.returnArrival ?? '')} · <b>${(dest.returnPrice ?? 0).toFixed(0)} €</b></div>`
+            ? `<div style="margin:4px 0;font-size:12px;color:#c2410c">Rück: ${fmt(dest.returnDeparture!)} → ${fmt(dest.returnArrival ?? '')} · <b>${(dest.returnPrice ?? 0).toFixed(0)} €</b></div>`
             : ''
 
           const popupHtml = `

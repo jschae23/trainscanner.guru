@@ -170,7 +170,7 @@ export function ConnectionsTable({
                             </Badge>
                           </PopoverTrigger>
                           <PopoverContent className="w-64 text-sm">
-                            <div className="font-semibold mb-2 text-amber-800">🧠 Intelligente Empfehlung</div>
+                            <div className="font-semibold mb-2 text-amber-800">Intelligente Empfehlung</div>
                             <div className="space-y-2">
                               <div className="text-xs">Basiert auf einer gewichteten Bewertung von:</div>
                               <ul className="list-disc list-inside space-y-1 text-xs text-gray-600">
@@ -350,7 +350,7 @@ export function ConnectionsTable({
                             </Badge>
                           </PopoverTrigger>
                           <PopoverContent className="w-64 text-sm">
-                            <div className="font-semibold mb-2 text-amber-800">🧠 Intelligente Empfehlung</div>
+                            <div className="font-semibold mb-2 text-amber-800">Intelligente Empfehlung</div>
                             <div className="space-y-2">
                               <div className="text-xs">Basiert auf einer gewichteten Bewertung von:</div>
                               <ul className="list-disc list-inside space-y-1 text-xs text-gray-600">

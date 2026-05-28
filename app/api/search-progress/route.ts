@@ -143,12 +143,12 @@ export async function POST(request: NextRequest) {
       // Session als abgeschlossen markieren, damit sie nicht mehr als aktiv gilt
       // Verwende die cancel-Funktion mit speziellem Grund für abgeschlossene Suchen
       globalRateLimiter.cancelSession(sessionId, 'search_completed')
-      logDebug(LOG_SCOPE, "✅ Search session marked as completed", { sessionId })
+      logDebug(LOG_SCOPE, "Search session marked as completed", { sessionId })
     }
 
     // Nur wichtige Meilensteine loggen
     if (data.totalDays > 0 && (data.currentDay === 1 || data.currentDay === data.totalDays || data.currentDay % 10 === 0)) {
-      logDebug(LOG_SCOPE, "📊 Search progress milestone updated", {
+      logDebug(LOG_SCOPE, "Search progress milestone updated", {
         sessionId,
         currentDay: data.currentDay,
         totalDays: data.totalDays,
@@ -172,7 +172,7 @@ setInterval(() => {
   for (const [sessionId, data] of progressStorage.entries()) {
     if (now - data.timestamp > oneHour) {
       progressStorage.delete(sessionId)
-      logDebug(LOG_SCOPE, "🧹 Old search progress data cleaned up", { sessionId })
+      logDebug(LOG_SCOPE, "Old search progress data cleaned up", { sessionId })
     }
   }
 }, 5 * 60 * 1000) // Cleanup alle 5 Minuten

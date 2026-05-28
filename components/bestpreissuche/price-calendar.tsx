@@ -412,7 +412,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
       {/* Fortschritt und Zeit */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-2 pb-0">
         <div className="flex items-center gap-2 text-sm text-blue-800">
-          {/* <span className="text-2xl">🚂</span> */}
+          {/* <span className="text-2xl">T</span> */}
           <span className="font-semibold">Suche Bestpreise</span>
           {startStation && zielStation && (
             <span className="text-blue-600">{startStation.name} → {zielStation.name}</span>
@@ -425,10 +425,10 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
               <span className="text-blue-600">noch ca. {formatTime(estimatedTimeRemaining)}</span>
             )}
             {(!isStreaming || isCompleteNow) && (
-              <span className="text-green-600">✓ Abgeschlossen</span>
+              <span className="text-green-600">Abgeschlossen</span>
             )}
             {userCancelled && isStreaming && !isCompleteNow && (
-              <span className="text-orange-600">🛑 Wird abgebrochen...</span>
+              <span className="text-orange-600">Wird abgebrochen...</span>
             )}
           </div>
           {isStreaming && !isCompleteNow && onCancelSearch && (
@@ -439,7 +439,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
               }}
               className="px-3 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-700 rounded transition-colors ml-2"
             >
-              🛑 Abbrechen
+              Abbrechen
             </button>
           )}
         </div>
@@ -463,7 +463,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
       {isStreaming && typeof progressData.totalUsers === 'number' && progressData.totalUsers > 1 && (
         <div className="bg-yellow-50 border border-yellow-200 p-3 rounded text-sm mx-2 mb-2 mt-3">
           <div className="flex items-center gap-2">
-            <div className="text-yellow-600">⏳</div>
+            <div className="text-yellow-600">Warte</div>
             <div className="text-yellow-800">
               <span className="font-medium">Mehrere Nutzer suchen gerade</span>
               <br />
@@ -609,8 +609,8 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
                         {/* Price indicators */}
                         {priceData.preis > 0 && (
                           <div className="text-[10px] sm:text-xs">
-                            {priceData.preis === minPrice && <span>🏆</span>}
-                            {priceData.preis === maxPrice && <span>💸</span>}
+                            {priceData.preis === minPrice && <span>*</span>}
+                            {priceData.preis === maxPrice && <span>$</span>}
                           </div>
                         )}
                       </div>
@@ -650,7 +650,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
                   {/* Indikator für Tage ohne Fahrten: nur für geprüfte Tage */}
                   {hasResult && priceData?.preis === 0 && (
                     <div className="absolute bottom-1 right-1">
-                      <span className="text-gray-400 text-xs select-none">❌</span>
+                      <span className="text-gray-400 text-xs select-none">X</span>
                     </div>
                   )}
                 </div>

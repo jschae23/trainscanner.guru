@@ -383,7 +383,7 @@ export function DayDetailsModal({
         {/* Swipe-Hinweis für Mobile */}
         {onNavigateDay && dayKeys.length > 1 && (
           <div className="md:hidden text-center text-xs text-gray-400 pb-0 pt-0">
-            💡 Wische nach links/rechts um zwischen Tagen zu wechseln
+            Wische nach links/rechts um zwischen Tagen zu wechseln
           </div>
         )}
 

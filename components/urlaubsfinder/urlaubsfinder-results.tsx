@@ -176,7 +176,7 @@ function JourneyBlock({
       <div className="flex items-center justify-between gap-2">
         <span className="text-xs text-gray-500">
           {transfers === 0
-            ? "✓ Direktverbindung"
+            ? "Direktverbindung"
             : transfers !== undefined && transfers > 0
             ? `${transfers} Umstieg${transfers > 1 ? "e" : ""}`
             : ""}

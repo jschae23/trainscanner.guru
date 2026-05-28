@@ -102,7 +102,7 @@ export default function DebugPage() {
       </div>
 
       <div className="mt-8 text-sm text-gray-600 bg-yellow-50 p-4 rounded">
-        <p className="font-bold mb-2">🔍 Debugging 422 Error:</p>
+        <p className="font-bold mb-2">Debugging 422 Error:</p>
         <ol className="list-decimal list-inside space-y-1">
           <li>Try "München" and "Berlin" first (major stations)</li>
           <li>Test "Minimal Request" to see if basic structure works</li>
