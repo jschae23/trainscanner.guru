@@ -1,0 +1,546 @@
+"use client"
+
+import { useState, useEffect, useRef } from "react"
+import { PriceCalendar } from "./price-calendar"
+import { DayDetailsModal } from "./day-details-modal"
+import { logError, logInfo, logWarn } from "@/lib/shared/logger"
+
+const LOG_SCOPE = "bestpreissuche.client"
+
+interface SearchParams {
+  start?: string
+  ziel?: string
+  reisezeitraumAb?: string
+  reisezeitraumBis?: string
+  alter?: string
+  ermaessigungArt?: string
+  ermaessigungKlasse?: string
+  klasse?: string
+  schnelleVerbindungen?: string
+  nurDeutschlandTicketVerbindungen?: string
+  maximaleUmstiege?: string
+  abfahrtAb?: string
+  ankunftBis?: string
+  wochentage?: string // Only weekdays
+  umstiegszeit?: string
+}
+
+interface TrainResultsProps {
+  searchParams: SearchParams
+}
+
+interface PriceHistoryEntry {
+  preis: number
+  recorded_at: number
+}
+
+interface PriceData {
+  preis: number
+  info: string
+  abfahrtsZeitpunkt: string
+  ankunftsZeitpunkt: string
+  recordedAt?: number
+  priceHistory?: PriceHistoryEntry[]
+  allIntervals?: Array<{
+    preis: number
+    abfahrtsZeitpunkt: string
+    ankunftsZeitpunkt: string
+    abfahrtsOrt: string
+    ankunftsOrt: string
+    info: string
+    umstiegsAnzahl?: number
+    isCheapestPerInterval?: boolean
+    priceHistory?: PriceHistoryEntry[]
+  }>
+}
+
+interface MetaData {
+  startStation: { name: string; id: string }
+  zielStation: { name: string; id: string }
+  sessionId?: string
+  searchParams?: {
+    klasse?: string
+    maximaleUmstiege?: string
+    schnelleVerbindungen?: string | boolean
+    nurDeutschlandTicketVerbindungen?: string | boolean
+    abfahrtAb?: string
+    ankunftBis?: string
+    umstiegszeit?: string
+  }
+}
+
+interface PriceResults {
+  [date: string]: PriceData
+}
+
+export function TrainResults({ searchParams }: TrainResultsProps) {
+  const [priceResults, setPriceResults] = useState<PriceResults>({})
+  const [loading, setLoading] = useState(false)
+  const [sessionId, setSessionId] = useState<string | null>(null)
+  const [selectedDay, setSelectedDay] = useState<string | null>(null)
+  const [selectedData, setSelectedData] = useState<PriceData | null>(null)
+  const [isStreaming, setIsStreaming] = useState(false)
+  const [abortController, setAbortController] = useState<AbortController | null>(null)
+  const calendarRef = useRef<HTMLDivElement>(null)
+  const [hasScrolledToCalendar, setHasScrolledToCalendar] = useState(false)
+  const [sessionCompleted, setSessionCompleted] = useState(false)
+
+  // Calculate expected days from weekdays
+  const expectedDays = (() => {
+    if (!searchParams.reisezeitraumAb || !searchParams.reisezeitraumBis) {
+      return undefined
+    }
+    try {
+      // Parse weekdays from readable format or default to all days
+      let weekdays: number[]
+      if (searchParams.wochentage) {
+        const decoded = decodeURIComponent(searchParams.wochentage)
+        if (decoded.startsWith('[')) {
+          // Old JSON format
+          weekdays = JSON.parse(decoded)
+        } else {
+          // New readable format: "1,2,3,4,5"
+          weekdays = decoded.split(',').map(Number).filter(n => !isNaN(n) && n >= 0 && n <= 6)
+        }
+      } else {
+        // No weekdays param = all days
+        weekdays = [1, 2, 3, 4, 5, 6, 0]
+      }
+      
+      const startDate = new Date(searchParams.reisezeitraumAb)
+      const endDate = new Date(searchParams.reisezeitraumBis)
+      let count = 0
+      
+      for (let d = new Date(startDate); d <= endDate && count < 30; d.setDate(d.getDate() + 1)) {
+        if (weekdays.includes(d.getDay())) {
+          count++
+        }
+      }
+      return count
+    } catch {
+      return undefined
+    }
+  })()
+
+  // Track der bereits eingetroffenen dayResults
+  const processedDaysRef = useRef<Set<string>>(new Set())
+
+  // Generate sessionId when search starts
+  const generateSessionId = () => {
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.randomUUID) {
+      return window.crypto.randomUUID()
+    }
+    // Fallback für ältere Browser
+    return 'xxxx-xxxx-4xxx-yxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0
+      const v = c === 'x' ? r : (r & 0x3 | 0x8)
+      return v.toString(16)
+    })
+  }
+
+  const validPriceResults = Object.entries(priceResults).filter(([key]) => key !== "_meta") as [string, PriceData][]
+  const _meta = (priceResults as any)._meta as MetaData | undefined
+  const startStation = _meta?.startStation
+  const zielStation = _meta?.zielStation
+
+  // Funktion zum Abbrechen der Suche
+  const cancelSearch = async () => {
+    logInfo(LOG_SCOPE, "User requested search cancellation", { sessionId })
+    
+    // Backend ZUERST über Abbruch informieren (bevor AbortController)
+    if (sessionId) {
+      try {
+        await fetch(`/api/search-prices/cancel-search`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId, reason: 'user_request' })
+        })
+        logInfo(LOG_SCOPE, "Backend notified about search cancellation", { sessionId })
+      } catch (error) {
+        logWarn(LOG_SCOPE, "Could not notify backend about search cancellation", {
+          sessionId,
+          error: error instanceof Error ? error.message : error,
+        })
+      }
+    }
+    
+    // AbortController abbrechen
+    if (abortController) {
+      abortController.abort()
+      setAbortController(null)
+    }
+    
+    // Frontend-State SPÄTER zurücksetzen (damit sessionId noch verfügbar ist)
+    setLoading(false)
+    setIsStreaming(false)
+    setSessionCompleted(false)
+    // sessionId NICHT sofort null setzen - wird durch useEffect cleanup gemacht
+  }
+
+  // Cleanup bei Component Unmount oder Navigation
+  useEffect(() => {
+    const handleBeforeUnload = async () => {
+      if (sessionId && isStreaming && !sessionCompleted) {
+        // Versuche Backend über Seitenabbruch zu informieren
+        try {
+          await fetch(`/api/search-prices/cancel-search`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId, reason: 'page_unload' })
+          })
+        } catch (error) {
+          logWarn(LOG_SCOPE, "Could not notify backend about page unload", {
+            sessionId,
+            error: error instanceof Error ? error.message : error,
+          })
+        }
+      }
+    }
+
+    const handleVisibilityChange = async () => {
+      if (document.hidden && sessionId && isStreaming && !sessionCompleted) {
+        // Seite ist nicht mehr sichtbar - informiere Backend
+        try {
+          await fetch(`/api/search-prices/cancel-search`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sessionId, reason: 'page_hidden' })
+          })
+        } catch (error) {
+          logWarn(LOG_SCOPE, "Could not notify backend about page visibility change", {
+            sessionId,
+            error: error instanceof Error ? error.message : error,
+          })
+        }
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      // Cleanup bei Component Unmount
+      if (sessionId && isStreaming) {
+        handleBeforeUnload()
+      }
+    }
+  }, [sessionId, isStreaming, sessionCompleted])
+
+  // Create a unique key for the current search to prevent duplicate requests
+  const currentSearchKey = JSON.stringify({
+    start: searchParams.start,
+    ziel: searchParams.ziel,
+    reisezeitraumAb: searchParams.reisezeitraumAb,
+    reisezeitraumBis: searchParams.reisezeitraumBis,
+    ermaessigungArt: searchParams.ermaessigungArt,
+    ermaessigungKlasse: searchParams.ermaessigungKlasse,
+    alter: searchParams.alter,
+    klasse: searchParams.klasse,
+    schnelleVerbindungen: searchParams.schnelleVerbindungen,
+    nurDeutschlandTicketVerbindungen: searchParams.nurDeutschlandTicketVerbindungen,
+    maximaleUmstiege: searchParams.maximaleUmstiege,
+    abfahrtAb: searchParams.abfahrtAb,
+    ankunftBis: searchParams.ankunftBis,
+    wochentage: searchParams.wochentage, // Changed from 'tage'
+    umstiegszeit: searchParams.umstiegszeit,
+  })
+
+  useEffect(() => {
+    // Only search if we have required params and this is a new search
+    if (!searchParams.start || !searchParams.ziel || currentSearchKey === "") {
+      return
+    }
+
+    const searchPrices = async () => {
+      setLoading(true)
+      setPriceResults({})
+      setIsStreaming(true)
+      processedDaysRef.current = new Set()
+      
+      // Generiere sessionId sofort im Frontend
+      const newSessionId = generateSessionId()
+      setSessionId(newSessionId)
+
+      // Erstelle AbortController für diese Anfrage
+      const controller = new AbortController()
+      setAbortController(controller)
+
+      try {
+        // Parse weekdays from readable format
+        let weekdays: number[]
+        if (searchParams.wochentage) {
+          const decoded = decodeURIComponent(searchParams.wochentage)
+          if (decoded.startsWith('[')) {
+            // Old JSON format
+            weekdays = JSON.parse(decoded)
+          } else {
+            // New readable format: "1,2,3,4,5"
+            weekdays = decoded.split(',').map(Number).filter(n => !isNaN(n) && n >= 0 && n <= 6)
+          }
+        } else {
+          // No weekdays param = all days
+          weekdays = [1, 2, 3, 4, 5, 6, 0]
+        }
+
+        const response = await fetch("/api/search-prices", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          signal: controller.signal,
+          body: JSON.stringify({
+            sessionId: newSessionId,
+            start: searchParams.start,
+            ziel: searchParams.ziel,
+            reisezeitraumAb: searchParams.reisezeitraumAb || new Date().toISOString().split("T")[0],
+            reisezeitraumBis: searchParams.reisezeitraumBis,
+            wochentage: weekdays,
+            alter: searchParams.alter || "ERWACHSENER",
+            ermaessigungArt: searchParams.ermaessigungArt || "KEINE_ERMAESSIGUNG",
+            ermaessigungKlasse: searchParams.ermaessigungKlasse || "KLASSENLOS",
+            klasse: searchParams.klasse || "KLASSE_2",
+            schnelleVerbindungen: searchParams.schnelleVerbindungen === "1",
+            nurDeutschlandTicketVerbindungen: searchParams.nurDeutschlandTicketVerbindungen === "1",
+            ...(searchParams.maximaleUmstiege !== undefined && searchParams.maximaleUmstiege !== "" && { maximaleUmstiege: Number.parseInt(searchParams.maximaleUmstiege) }),
+            abfahrtAb: searchParams.abfahrtAb,
+            ankunftBis: searchParams.ankunftBis,
+            umstiegszeit: searchParams.umstiegszeit,
+          }),
+        })
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({ error: "Unknown error" }))
+          throw new Error(errorData.error || `HTTP ${response.status}: Bestpreissuche fehlgeschlagen`)
+        }
+
+        const reader = response.body?.getReader()
+        const decoder = new TextDecoder()
+        
+        if (reader) {
+          // Streaming response verarbeiten
+          let buffer = ""
+          
+          try {
+            while (true) {
+              const { done, value } = await reader.read()
+              if (done) break
+              buffer += decoder.decode(value, { stream: true })
+              const lines = buffer.split('\n')
+              buffer = lines.pop() || ""
+              
+              for (const line of lines) {
+                if (line.trim()) {
+                  try {
+                    const data = JSON.parse(line)
+                    
+                    if (data.type === 'dayResult') {
+                      // Einzelnes Tagesergebnis hinzufügen
+                      setPriceResults(prev => ({
+                        ...prev,
+                        [data.date]: data.result,
+                        _meta: data.meta || prev._meta
+                      }))
+                      // Client-seitig als abgeschlossen markieren, wenn letzter Tag eingetroffenen ist
+                      processedDaysRef.current.add(data.date)
+                      if (expectedDays && processedDaysRef.current.size >= expectedDays) {
+                        setIsStreaming(false)
+                        setSessionCompleted(true)
+                        setTimeout(() => setSessionId(null), 500)
+                      }
+                    } else if (data.type === 'complete') {
+                      // Vollständige Ergebnisse bei Abschluss
+                      setPriceResults(data.results)
+                      setLoading(false)
+                      setIsStreaming(false)
+                      setSessionCompleted(true)
+                      setSessionId(null)
+                      return
+                    }
+                  } catch {
+                    logWarn(LOG_SCOPE, "Could not parse Bestpreissuche streaming response line", {
+                      sessionId: newSessionId,
+                      line,
+                    })
+                  }
+                }
+              }
+            }
+            // Set status to completed after streaming ends
+            setLoading(false)
+            setIsStreaming(false)
+            setSessionCompleted(true)
+          } finally {
+            reader.releaseLock()
+          }
+          
+          // Fallback: Versuche finalen Buffer als JSON zu parsen
+          if (buffer.trim()) {
+            try {
+              const finalData = JSON.parse(buffer)
+              setPriceResults(finalData)
+              setSessionCompleted(true)
+            } catch (e) {
+              logWarn(LOG_SCOPE, "Could not parse Bestpreissuche final streaming buffer", {
+                sessionId: newSessionId,
+                buffer,
+                error: e instanceof Error ? e.message : e,
+              })
+            }
+          }
+        } else {
+          // Fallback für non-streaming response
+          const data = await response.json()
+          setPriceResults(data)
+          setSessionCompleted(true)
+        }
+        
+        // Cleanup nach 1 Sekunde um sicherzustellen dass alle Backend-Operationen abgeschlossen sind
+        setTimeout(() => {
+          setSessionId(null)
+        }, 1000)
+        setAbortController(null)
+      } catch (err) {
+         // Check if error was due to abort
+        if (err instanceof Error && err.name === 'AbortError') {
+          logInfo(LOG_SCOPE, "Bestpreissuche request aborted by user", { sessionId: newSessionId })
+        } else {
+          logError(LOG_SCOPE, "Bestpreissuche client request failed", err, { sessionId: newSessionId })
+        }
+      } finally {
+        setLoading(false)
+        setIsStreaming(false)
+        // Cleanup nach 1 Sekunde um sicherzustellen dass alle Backend-Operationen abgeschlossen sind
+        setTimeout(() => {
+          setSessionId(null)
+        }, 1000)
+        setAbortController(null)
+      }
+    }
+
+    searchPrices()
+  }, [
+    currentSearchKey,
+    searchParams.start,
+    searchParams.ziel,
+    searchParams.reisezeitraumAb,
+    searchParams.reisezeitraumBis,
+    searchParams.alter,
+    searchParams.klasse,
+    searchParams.schnelleVerbindungen,
+    searchParams.nurDeutschlandTicketVerbindungen,
+    searchParams.maximaleUmstiege,
+    searchParams.ermaessigungArt,
+    searchParams.ermaessigungKlasse,
+    searchParams.abfahrtAb,
+    searchParams.ankunftBis,
+    searchParams.wochentage, // Changed from 'tage'
+    searchParams.umstiegszeit,
+  ])
+
+  // --- Tag-Navigation für Modal und Kalender ---
+  const dayKeys = validPriceResults.map(([date]) => date).sort()
+  const handleNavigateDay = (direction: number) => {
+    if (!selectedDay) return
+    const idx = dayKeys.indexOf(selectedDay)
+    const newIdx = idx + direction
+    if (newIdx >= 0 && newIdx < dayKeys.length) {
+      const newDay = dayKeys[newIdx]
+      setSelectedDay(newDay)
+      setSelectedData(priceResults[newDay])
+    }
+  }
+
+  const prices = validPriceResults
+    .map(([, r]) => r.preis)
+    .filter((p) => p > 0)
+
+  const minPrice = Math.min(...prices)
+  const maxPrice = Math.max(...prices)
+  const avgPrice = Math.round(prices.reduce((a: number, b: number) => a + b, 0) / prices.length)
+
+  useEffect(() => {
+    // Sobald der Kalender sichtbar ist (auch beim Laden), einmalig scrollen
+    if (!hasScrolledToCalendar && calendarRef.current && (loading || isStreaming || validPriceResults.length > 0)) {
+      calendarRef.current.scrollIntoView({ behavior: "smooth", block: "start" })
+      setHasScrolledToCalendar(true)
+    }
+  }, [loading, isStreaming, hasScrolledToCalendar, validPriceResults.length])
+
+  // Show nothing if no search params
+  if (!searchParams.start || !searchParams.ziel) {
+    return null
+  }
+
+  // Reset scroll-Flag, wenn neue Suche gestartet wird
+  useEffect(() => {
+    setHasScrolledToCalendar(false)
+  }, [currentSearchKey])
+
+  // Always show calendar when search is active or has results
+  if (!loading && !isStreaming && (!validPriceResults || validPriceResults.length === 0)) {
+    return (
+        <div className="text-center py-8">
+          <p className="text-red-600 font-medium">Keine Bestpreise gefunden</p>
+          <p className="text-gray-600 text-sm mt-2">
+            Bitte überprüfe die Bahnhofsnamen und versuche es erneut.
+          </p>
+        </div>
+    )
+  }
+
+  // Only show "no prices" message if search is completely done and no valid prices found
+  if (!loading && !isStreaming && prices.length === 0) {
+    return (
+        <div className="text-center py-8">
+          <p className="text-orange-600 font-medium">Keine Preise verfügbar</p>
+          <p className="text-gray-600 text-sm mt-2">Für den gewählten Zeitraum sind keine Bestpreise verfügbar.</p>
+        </div>
+    )
+  }
+
+  return (
+      <div className="space-y-6">
+        {/* Calendar View */}
+        <div ref={calendarRef}>
+          <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            📅 Preiskalender
+            <span className="text-sm font-normal text-gray-500">(Klicken zum Buchen)</span>
+          </h3>
+          <PriceCalendar
+              results={priceResults}
+              onDayClick={(date, data) => {
+                setSelectedDay(date)
+                setSelectedData(data)
+              }}
+              startStation={startStation}
+              zielStation={zielStation}
+              searchParams={searchParams}
+              isStreaming={isStreaming}
+              sessionId={sessionId}
+              onCancelSearch={cancelSearch}
+              selectedDay={selectedDay || undefined}
+              onNavigateDay={handleNavigateDay}
+              expectedDays={expectedDays}
+          />
+        </div>
+
+        {/* Day Details Modal */}
+        <DayDetailsModal
+            isOpen={!!selectedDay}
+            onClose={() => {
+              setSelectedDay(null)
+              setSelectedData(null)
+            }}
+            date={selectedDay}
+            data={selectedData}
+            startStation={startStation}
+            zielStation={zielStation}
+            searchParams={searchParams}
+            onNavigateDay={handleNavigateDay}
+            dayKeys={dayKeys}
+        />
+      </div>
+  )
+}
