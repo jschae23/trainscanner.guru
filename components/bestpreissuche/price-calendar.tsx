@@ -590,13 +590,6 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
                             </>
                           )}
                         </div>
-                        {/* Price indicators */}
-                        {priceData.preis > 0 && (
-                          <div className="text-[10px] sm:text-xs">
-                            {priceData.preis === minPrice && <span>*</span>}
-                            {priceData.preis === maxPrice && <span>$</span>}
-                          </div>
-                        )}
                       </div>
                       {/* Departure time immer unten, absolut positioniert */}
                       {priceData.preis > 0 && priceData.abfahrtsZeitpunkt && priceData.ankunftsZeitpunkt && (
