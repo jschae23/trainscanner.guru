@@ -31,3 +31,4 @@ package-lock.json
 next-env.d.ts
 
 /.idea
+.DS_STORE
