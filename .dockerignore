@@ -5,3 +5,14 @@ dist
 Dockerfile
 README.md
 data
+*.md
+*.log
+.env*
+.eslint*
+.prettier*
+tsconfig.tsbuildinfo
+wrangler.toml
+.gitlab-ci.yml
+scripts/
+.DS_Store
+LICENSE
