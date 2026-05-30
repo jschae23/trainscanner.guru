@@ -1,15 +1,71 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
+const siteUrl = 'https://trainscanner.site'
+
 export const metadata: Metadata = {
-  title: 'trainscanner.guru',
-  description: 'Mit dem trainscanner.guru die günstigsten Sparpreise der Deutschen Bahn über einen Zeitraum auf einen Blick finden.',
-  generator: 'v0.dev',
-    icons: {
-        icon: '/favicon-32x32.png', // /public path
-    },
+  title: {
+    default: 'trainscanner.site – günstige Bahn Sparpreise auf einen Blick',
+    template: '%s | trainscanner.site',
+  },
+  description:
+    'Mit dem trainscanner.site die günstigsten Sparpreise der Deutschen Bahn über einen Zeitraum auf einen Blick finden. Bahnreisen einfach vergleichen und sparen.',
+  metadataBase: new URL(siteUrl),
+  alternates: {
+    canonical: siteUrl,
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'de_DE',
+    siteName: 'trainscanner.site',
+    title: 'trainscanner.site – günstige Bahn Sparpreise auf einen Blick',
+    description:
+      'Mit dem trainscanner.site die günstigsten Sparpreise der Deutschen Bahn über einen Zeitraum auf einen Blick finden.',
+    url: siteUrl,
+    images: [
+      {
+        url: '/apple-icon.png',
+        width: 180,
+        height: 180,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary',
+    title: 'trainscanner.site – günstige Bahn Sparpreise auf einen Blick',
+    description:
+      'Mit dem trainscanner.site die günstigsten Sparpreise der Deutschen Bahn über einen Zeitraum auf einen Blick finden.',
+  },
+  icons: {
+    icon: '/favicon-32x32.png',
+    apple: '/apple-icon.png',
+  },
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+  },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#1E283A',
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'trainscanner.site',
+  url: siteUrl,
+  description:
+    'Mit dem trainscanner.site die günstigsten Sparpreise der Deutschen Bahn über einen Zeitraum auf einen Blick finden.',
+  inLanguage: 'de',
+  applicationCategory: 'TravelApplication',
+  operatingSystem: 'Any',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'EUR',
+  },
 }
 
 export default function RootLayout({
@@ -17,9 +73,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const jsonLdHtml = JSON.stringify(jsonLd)
+
   return (
-    <html lang="en">
+    <html lang="de">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml }}
+        />
         <style>{`
 html {
   font-family: ${GeistSans.style.fontFamily};
@@ -27,6 +89,7 @@ html {
   --font-mono: ${GeistMono.variable};
 }
         `}</style>
+        <title>trainscanner.site</title>
       </head>
       <body>{children}</body>
     </html>
