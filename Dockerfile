@@ -27,7 +27,9 @@ RUN addgroup --system --gid 1001 nodejs \
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+COPY --chmod=755 entrypoint.sh /entrypoint.sh
+RUN apk add --no-cache su-exec
 RUN chown -R nextjs:nodejs /app
-USER nextjs
 EXPOSE 3000
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["node", "server.js"]
