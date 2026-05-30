@@ -10,7 +10,7 @@ export function BrandLogo() {
       aria-label="trainscanner.guru Startseite"
     >
       <span className="text-3xl font-bold leading-none tracking-normal text-gray-900 sm:text-4xl">
-        trainscanner<span className="font-semibold text-blue-600">.guru</span>
+        trainscanner<span className="font-semibold text-blue-600">.site</span>
       </span>
     </Link>
   )

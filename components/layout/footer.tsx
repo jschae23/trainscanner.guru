@@ -25,11 +25,11 @@ export function Footer({ show = false }: FooterProps) {
       <div className="text-xs text-center text-gray-400 mt-0">
         <p>
           Dieses Deployment dient ausschließlich als technische Demonstration des Projekts{" "}
-          <a href="https://github.com/XLixl4snSU/trainscanner.guru"
+          <a href="https://gitlab.com/jschae23/trainscanner.guru"
             className="underline"
             target="_blank"
             rel="noopener noreferrer"
-          >trainscanner.guru</a>
+          >trainscanner.site</a>
         </p>
 
         <p>
