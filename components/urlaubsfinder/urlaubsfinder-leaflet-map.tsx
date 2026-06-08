@@ -151,7 +151,7 @@ const DynamicLeaflet = dynamic(async () => {
           if (pricePercent > 66) bgColor = '#ef4444' // red
           else if (pricePercent > 33) bgColor = '#f59e0b' // amber
 
-          const label = pricePercent < 33 ? '$' : pricePercent < 66 ? '=' : 'X'
+          const label = pricePercent < 33 ? '·' : pricePercent < 66 ? '=' : 'X'
 
           const icon = L.divIcon({
             html: `<div style="position:relative;display:inline-flex;flex-direction:column;align-items:center;cursor:pointer">
