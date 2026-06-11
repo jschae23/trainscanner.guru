@@ -13,7 +13,7 @@ export function Footer({ show = false }: FooterProps) {
   const appVersion = getAppVersion()
   const [showFooter] = useState(() => {
     if (typeof window !== 'undefined') {
-      return window.location.hostname === "trainscanner.guru" || show
+      return window.location.hostname === "trainscanner.site" || show
     }
     return show
   })
@@ -25,7 +25,7 @@ export function Footer({ show = false }: FooterProps) {
       <div className="text-xs text-center text-gray-400 mt-0">
         <p>
           Dieses Deployment dient ausschließlich als technische Demonstration des Projekts{" "}
-          <a href="https://gitlab.com/jschae23/trainscanner.guru"
+          <a href="https://gitlab.com/jschae23/trainscanner.site"
             className="underline"
             target="_blank"
             rel="noopener noreferrer"
@@ -42,20 +42,20 @@ export function Footer({ show = false }: FooterProps) {
           Deployment auf Hinweis hin umgehend deaktiviert.
           Kontakt:
           {" "}
-          <a href="mailto:info@trainscanner.guru" className="underline">
-            info@trainscanner.guru
+          <a href="mailto:info@trainscanner.site" className="underline">
+            info@trainscanner.site
           </a>
           .
         </p>
       </div>
       <div className="flex flex-row justify-between items-center text-sm text-gray-500 mt-4" >
         <div>
-          © {currentYear} <span className="font-medium text-gray-600">trainscanner.guru</span>
+          © {currentYear} <span className="font-medium text-gray-600">trainscanner.site</span>
         </div>
         <div className="mt-2 sm:mt-0 flex flex-row sm:items-end items-center gap-3">
           <span>Version {appVersion}</span>
           <a
-            href="https://github.com/XLixl4snSU/trainscanner.guru"
+            href="https://github.com/XLixl4snSU/trainscanner.site"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-600 hover:underline mt-1 flex items-center"
