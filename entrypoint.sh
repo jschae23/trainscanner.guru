@@ -2,6 +2,6 @@
 set -e
 
 mkdir -p /app/data
-chown nextjs:nodejs /app/data
+chown -R nextjs:nodejs /app/data
 
 exec su-exec nextjs "$@"
