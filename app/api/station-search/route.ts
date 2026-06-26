@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
             if (response.status === 429) {
               return { __httpStatus: 429, __errorText: 'Rate limit exceeded' }
             }
-            throw new Error(`API error: ${response.status}`)
+            throw new Error(`API error: ${JSON.stringify(response)}`)
           }
           
           return await response.json<Array<{
