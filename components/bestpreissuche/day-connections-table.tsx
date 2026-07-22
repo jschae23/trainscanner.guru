@@ -54,27 +54,27 @@ export function ConnectionsTable({
   // }, [showOnlyCheapest, setShowOnlyCheapest])
 
   return (
-    <div className="bg-blue-50 p-4 rounded-lg">
+    <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2 md:gap-0">
-        <h3 className="font-semibold text-blue-800 flex items-center gap-2">
+        <h3 className="font-semibold text-blue-800 dark:text-blue-200 flex items-center gap-2">
           <Train className="h-4 w-4" />
           Alle verfügbaren Verbindungen ({intervals.length})
         </h3>
         <div className="flex flex-col md:flex-row md:items-center gap-1 mt-2 md:mt-0">
           <div className="flex items-center gap-1">
-            <span className="text-sm text-blue-700">Nur günstigste Fahrt im Bestpreis-Zeitfenster</span>
+            <span className="text-sm text-blue-700 dark:text-blue-300">Nur günstigste Fahrt im Bestpreis-Zeitfenster</span>
             <Switch
               checked={showOnlyCheapest}
               onCheckedChange={setShowOnlyCheapest}
             />
             <Popover>
               <PopoverTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-6 w-6 p-0 text-blue-600" aria-label="Info zu Zeitfenstern">
+                <Button variant="ghost" size="icon" className="h-6 w-6 p-0 text-blue-600 dark:text-blue-400" aria-label="Info zu Zeitfenstern">
                   <Info className="h-4 w-4" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="max-w-xs text-sm text-gray-700">
-                <div className="font-semibold mb-1 text-blue-800">Bestpreis-Zeitfenster</div>
+              <PopoverContent className="max-w-xs text-sm text-gray-700 dark:text-gray-300">
+                <div className="font-semibold mb-1 text-blue-800 dark:text-blue-200">Bestpreis-Zeitfenster</div>
                 <div>
                   Die Bahn gruppiert Bestpreis-Verbindungen in folgende Zeitfenster:<br />
                   0–7 Uhr, 7-10 Uhr, 10–13 Uhr, 13–16 Uhr, 16–19 Uhr, 19–24 Uhr.<br />
@@ -85,7 +85,7 @@ export function ConnectionsTable({
             </Popover>
           </div>
           <div className="hidden md:flex items-center gap-1 ml-4">
-            <span className="text-sm text-blue-700">Fahrtverlauf aller Verbindungen anzeigen</span>
+            <span className="text-sm text-blue-700 dark:text-blue-300">Fahrtverlauf aller Verbindungen anzeigen</span>
             <Switch
               checked={showAllJourneyDetails}
               onCheckedChange={setShowAllJourneyDetails}
@@ -97,24 +97,24 @@ export function ConnectionsTable({
         {/* Sortierbare Tabellen-Header - Desktop Only */}
         {hasMultipleIntervals && (
           <div className="mb-2 hidden md:block">
-            <div className="grid grid-cols-[1.5fr_1.5fr_3fr_2fr_2fr_2fr] gap-6 text-xs font-semibold select-none sticky top-0 bg-blue-50 z-10 border-b border-blue-200 pb-2 px-5 text-gray-600">
-              <div className="cursor-pointer hover:text-blue-700 flex items-center gap-1" onClick={() => handleSort('abfahrt')}>
+            <div className="grid grid-cols-[1.5fr_1.5fr_3fr_2fr_2fr_2fr] gap-6 text-xs font-semibold select-none sticky top-0 bg-blue-50 dark:bg-blue-900/30 z-10 border-b border-blue-200 dark:border-blue-800 pb-2 px-5 text-gray-600 dark:text-gray-400">
+              <div className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1" onClick={() => handleSort('abfahrt')}>
                 Abfahrt
                 {sortKey === 'abfahrt' && (sortDir === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />)}
               </div>
-              <div className="cursor-pointer hover:text-blue-700 flex items-center gap-1" onClick={() => handleSort('ankunft')}>
+              <div className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1" onClick={() => handleSort('ankunft')}>
                 Ankunft
                 {sortKey === 'ankunft' && (sortDir === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />)}
               </div>
-              <div className="cursor-pointer hover:text-blue-700 flex items-center gap-1" onClick={() => handleSort('dauer')}>
+              <div className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1" onClick={() => handleSort('dauer')}>
                 Dauer
                 {sortKey === 'dauer' && (sortDir === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />)}
               </div>
-              <div className="cursor-pointer hover:text-blue-700 flex items-center gap-1" onClick={() => handleSort('umstiege')}>
+              <div className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1" onClick={() => handleSort('umstiege')}>
                 Umstiege
                 {sortKey === 'umstiege' && (sortDir === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />)}
               </div>
-              <div className="cursor-pointer hover:text-blue-700 flex items-center gap-1" onClick={() => handleSort('preis')}>
+              <div className="cursor-pointer hover:text-blue-700 dark:hover:text-blue-300 flex items-center gap-1" onClick={() => handleSort('preis')}>
                 Preis
                 {sortKey === 'preis' && (sortDir === 'asc' ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />)}
               </div>
@@ -148,12 +148,12 @@ export function ConnectionsTable({
                     searchParams.umstiegszeit
                   )
                 : null;
-            const cardBg = isBestPrice ? 'bg-green-50' : 
-                          isRecommended ? 'bg-amber-50' : 
-                          isFastest ? 'bg-purple-50' : 'bg-white';
+            const cardBg = isBestPrice ? 'bg-green-50 dark:bg-green-900/30' : 
+                          isRecommended ? 'bg-amber-50 dark:bg-amber-900/30' : 
+                          isFastest ? 'bg-purple-50 dark:bg-purple-900/30' : 'bg-white dark:bg-gray-800';
             const leftBorder = isBestPrice ? 'border-l-8 border-l-green-500' : 
                               isRecommended ? 'border-l-8 border-l-amber-500' :
-                              isFastest ? 'border-l-8 border-l-purple-500' : 'border-l-8 border-l-gray-200';
+                               isFastest ? 'border-l-8 border-l-purple-500' : 'border-l-8 border-l-gray-200 dark:border-l-gray-700';
             return (
               <React.Fragment key={index}>
                 {/* Mobile */}
@@ -164,21 +164,21 @@ export function ConnectionsTable({
                       {isRecommended && (
                         <Popover>
                           <PopoverTrigger asChild>
-                            <Badge className="bg-amber-100 text-amber-800 border border-amber-400 rounded-full cursor-help flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
+                            <Badge className="bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 border border-amber-400 rounded-full cursor-help flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
                               <Star className="h-3 w-3" />
                             </Badge>
                           </PopoverTrigger>
                           <PopoverContent className="w-64 text-sm">
-                            <div className="font-semibold mb-2 text-amber-800">Intelligente Empfehlung</div>
+                            <div className="font-semibold mb-2 text-amber-800 dark:text-amber-200">Intelligente Empfehlung</div>
                             <div className="space-y-2">
                               <div className="text-xs">Basiert auf einer gewichteten Bewertung von:</div>
-                              <ul className="list-disc list-inside space-y-1 text-xs text-gray-600">
+                              <ul className="list-disc list-inside space-y-1 text-xs text-gray-600 dark:text-gray-400">
                                 <li><strong>45%</strong> Preis</li>
                                 <li><strong>30%</strong> Reisezeit</li>
                                 <li><strong>25%</strong> Anzahl Umstiege (Komfort)</li>
                                 <li><strong>Direktverbindung</strong> wird bis zu 40% Aufpreis bevorzugt</li>
                               </ul>
-                              <div className="text-xs mt-2 p-2 bg-amber-100 rounded font-medium">
+                              <div className="text-xs mt-2 p-2 bg-amber-100 dark:bg-amber-900/40 rounded font-medium">
                                 {recommendation?.explanation.reason}
                               </div>
                             </div>
@@ -186,7 +186,7 @@ export function ConnectionsTable({
                         </Popover>
                       )}
                       {isBestPrice && (
-                        <Badge className="bg-green-100 text-green-800 border border-green-400 rounded-full flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
+                        <Badge className="bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200 border border-green-400 rounded-full flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
                           <Euro className="h-3 w-3" />
                           Bestpreis
                         </Badge>
@@ -199,19 +199,19 @@ export function ConnectionsTable({
                     {/* Abfahrt - Pfeil - Ankunft */}
                     <div className="flex items-center gap-2">
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-gray-900">
+                        <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                           {new Date(interval.abfahrtsZeitpunkt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                         </div>
-                        <div className="text-xs text-gray-500 mt-0.5">Abfahrt</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Abfahrt</div>
                       </div>
                       
-                      <ArrowRight className="h-5 w-5 text-gray-400 flex-shrink-0" />
+                      <ArrowRight className="h-5 w-5 text-gray-400 dark:text-gray-500 flex-shrink-0" />
                       
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-gray-900">
+                        <div className="text-2xl font-bold text-gray-900 dark:text-gray-100">
                           {new Date(interval.ankunftsZeitpunkt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                         </div>
-                        <div className="text-xs text-gray-500 mt-0.5">Ankunft</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Ankunft</div>
                       </div>
                     </div>
                     
@@ -224,17 +224,17 @@ export function ConnectionsTable({
                   </div>
 
                   {/* Details Grid */}
-                  <div className="py-3 border-t border-b border-gray-200 space-y-2">
+                  <div className="py-3 border-t border-b border-gray-200 dark:border-gray-700 space-y-2">
                     {/* Erste Zeile: Dauer und Umstiege nebeneinander */}
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <div className="text-xs text-gray-500 mb-1">Dauer</div>
-                        <div className="font-semibold text-sm text-gray-900">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Dauer</div>
+                        <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                           {calculateDuration(interval.abfahrtsZeitpunkt, interval.ankunftsZeitpunkt)}
                         </div>
                         {isFastest && (
                           <div className="mt-1">
-                            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[9px] font-semibold">
+                            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-200 text-[9px] font-semibold">
                               <TrendingUp className="h-2.5 w-2.5 mr-0.5" />
                               Schnellste
                             </span>
@@ -243,11 +243,11 @@ export function ConnectionsTable({
                       </div>
                       
                       <div>
-                        <div className="text-xs text-gray-500 mb-1">Umstiege</div>
-                        <div className="font-semibold text-sm text-gray-900">
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Umstiege</div>
+                        <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                           {interval.umstiegsAnzahl || 0}
                           {(interval.umstiegsAnzahl || 0) === 0 && (
-                            <span className="text-[10px] text-green-600 font-medium ml-1">(Direkt)</span>
+                            <span className="text-[10px] text-green-600 dark:text-green-400 font-medium ml-1">(Direkt)</span>
                           )}
                         </div>
                       </div>
@@ -255,7 +255,7 @@ export function ConnectionsTable({
                     
                     {/* Zweite Zeile: Fahrzeugtypen über die gesamte Breite */}
                     <div>
-                      <div className="text-xs text-gray-500 mb-1">Züge</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Züge</div>
                       <div className="flex flex-wrap gap-1">
                         <VehicleTypesSummary interval={interval} />
                       </div>
@@ -316,7 +316,7 @@ export function ConnectionsTable({
                   
                   {/* Exklusiv: Preisverlauf */}
                   {interval.priceHistory && interval.priceHistory.length > 1 && expandedItems.has(`preisverlauf-${index}`) && (
-                    <div className="mt-5 pt-5 border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-top-2 duration-200">
                        {/* Keine doppelte Box mehr, Chart direkt rendern */}
                        <PriceHistoryChart history={interval.priceHistory} title="Preisentwicklung" />
                     </div>
@@ -324,8 +324,8 @@ export function ConnectionsTable({
 
                   {/* Exklusiv: Fahrtverlauf */}
                   {expandedItems.has(index) && (
-                    <div className="mt-3 pt-3 border-t border-gray-200">
-                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                    <div className="mt-3 pt-3 border-t border-gray-200 dark:border-gray-700">
+                      <div className="bg-gray-50 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
                         <JourneyTimelineVertical legs={interval.abschnitte ?? []} />
                       </div>
                     </div>
@@ -334,7 +334,7 @@ export function ConnectionsTable({
 
                 {/* Desktop View - Redesigned */}
                 <div
-                  className={`hidden md:block p-6 rounded-2xl relative text-sm shadow-sm transition-all hover:shadow-md border bg-white ${leftBorder} ${cardBg}`}
+                  className={`hidden md:block p-6 rounded-2xl relative text-sm shadow-sm transition-all hover:shadow-md border bg-white dark:bg-gray-800 ${leftBorder} ${cardBg}`}
                   style={isRecommended || isBestPrice ? { paddingTop: 48 } : {}}
                 >
                   {/* Badges (Recommended / Best Price) */}
@@ -343,21 +343,21 @@ export function ConnectionsTable({
                       {isRecommended && (
                         <Popover>
                           <PopoverTrigger asChild>
-                            <Badge className="bg-amber-100 text-amber-800 border border-amber-400 rounded-full cursor-help flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
+                            <Badge className="bg-amber-100 dark:bg-amber-900/40 text-amber-800 dark:text-amber-200 border border-amber-400 rounded-full cursor-help flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
                               <Star className="h-3 w-3" />
                             </Badge>
                           </PopoverTrigger>
                           <PopoverContent className="w-64 text-sm">
-                            <div className="font-semibold mb-2 text-amber-800">Intelligente Empfehlung</div>
+                            <div className="font-semibold mb-2 text-amber-800 dark:text-amber-200">Intelligente Empfehlung</div>
                             <div className="space-y-2">
                               <div className="text-xs">Basiert auf einer gewichteten Bewertung von:</div>
-                              <ul className="list-disc list-inside space-y-1 text-xs text-gray-600">
+                              <ul className="list-disc list-inside space-y-1 text-xs text-gray-600 dark:text-gray-400">
                                 <li><strong>45%</strong> Preis</li>
                                 <li><strong>30%</strong> Reisezeit</li>
                                 <li><strong>25%</strong> Anzahl Umstiege (Komfort)</li>
                                 <li><strong>Direktverbindung</strong> wird bis zu 40% Aufpreis bevorzugt</li>
                               </ul>
-                              <div className="text-xs mt-2 p-2 bg-amber-100 rounded font-medium">
+                              <div className="text-xs mt-2 p-2 bg-amber-100 dark:bg-amber-900/40 rounded font-medium">
                                 {recommendation?.explanation.reason}
                               </div>
                             </div>
@@ -365,7 +365,7 @@ export function ConnectionsTable({
                         </Popover>
                       )}
                       {isBestPrice && (
-                        <Badge className="bg-green-100 text-green-800 border border-green-400 rounded-full flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
+                        <Badge className="bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200 border border-green-400 rounded-full flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
                           <Euro className="h-3 w-3" />
                           Bestpreis
                         </Badge>
@@ -377,31 +377,31 @@ export function ConnectionsTable({
                     
                     {/* Abfahrt */}
                     <div className="relative">
-                      <div className="font-bold text-lg text-gray-900">
+                      <div className="font-bold text-lg text-gray-900 dark:text-gray-100">
                         {new Date(interval.abfahrtsZeitpunkt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                       </div>
-                      <div className="text-xs text-gray-500 truncate" title={interval.abfahrtsOrt}>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 truncate" title={interval.abfahrtsOrt}>
                         {interval.abfahrtsOrt}
                       </div>
-                      <ArrowRight className="absolute -right-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-300" />
+                      <ArrowRight className="absolute -right-5 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-300 dark:text-gray-600" />
                     </div>
 
                     {/* Ankunft */}
                     <div>
-                      <div className="font-bold text-lg text-gray-900">
+                      <div className="font-bold text-lg text-gray-900 dark:text-gray-100">
                         {new Date(interval.ankunftsZeitpunkt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
                       </div>
-                      <div className="text-xs text-gray-500 truncate" title={interval.ankunftsOrt}>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 truncate" title={interval.ankunftsOrt}>
                         {interval.ankunftsOrt}
                       </div>
                     </div>
 
                     {/* Dauer & Fahrzeuge */}
                     <div>
-                      <div className="flex items-center gap-2 font-medium text-gray-900">
+                      <div className="flex items-center gap-2 font-medium text-gray-900 dark:text-gray-100">
                         {calculateDuration(interval.abfahrtsZeitpunkt, interval.ankunftsZeitpunkt)}
                         {isFastest && (
-                          <span className="inline-flex items-center px-1 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-semibold ml-1">
+                          <span className="inline-flex items-center px-1 py-0.5 rounded bg-purple-100 dark:bg-purple-900/40 text-purple-800 dark:text-purple-200 text-[10px] font-semibold ml-1">
                             <TrendingUp className="h-3 w-3 mr-1" />
                             Schnell
                           </span>
@@ -414,8 +414,8 @@ export function ConnectionsTable({
 
                     {/* Umstiege & Fahrtverlauf */}
                     <div>
-                      <div className="font-medium text-gray-900 flex items-center gap-1">
-                         <Shuffle className="h-3.5 w-3.5 text-gray-400" />
+                      <div className="font-medium text-gray-900 dark:text-gray-100 flex items-center gap-1">
+                         <Shuffle className="h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
                          {interval.umstiegsAnzahl === 0 ? "Direkt" : interval.umstiegsAnzahl}
                       </div>
                       
@@ -423,7 +423,7 @@ export function ConnectionsTable({
                       {!showAllJourneyDetails && (
                         <button
                           onClick={() => toggleExpanded(index)}
-                          className={`text-xs font-medium flex items-center gap-1 mt-1.5 transition-colors ${expandedItems.has(index) ? 'text-blue-700' : 'text-gray-500 hover:text-blue-600'}`}
+                          className={`text-xs font-medium flex items-center gap-1 mt-1.5 transition-colors ${expandedItems.has(index) ? 'text-blue-700 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400'}`}
                         >
                           <Info className="h-3 w-3" />
                           Fahrtverlauf
@@ -444,14 +444,14 @@ export function ConnectionsTable({
                             e.stopPropagation();
                             toggleExpanded(`preisverlauf-${index}`);
                           }}
-                          className={`text-xs font-medium flex items-center gap-1 mt-1 transition-colors ${expandedItems.has(`preisverlauf-${index}`) ? 'text-blue-700' : 'text-gray-500 hover:text-blue-600'}`}
+                          className={`text-xs font-medium flex items-center gap-1 mt-1 transition-colors ${expandedItems.has(`preisverlauf-${index}`) ? 'text-blue-700 dark:text-blue-300' : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400'}`}
                         >
                           {getTrendIcon(interval.priceHistory)}
                           Preisentwicklung
                           {expandedItems.has(`preisverlauf-${index}`) ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                         </button>
                       ) : (
-                         <div className="text-xs text-gray-300 flex items-center gap-1 mt-1 cursor-not-allowed" title="Keine Daten verfügbar">
+                         <div className="text-xs text-gray-300 dark:text-gray-600 flex items-center gap-1 mt-1 cursor-not-allowed" title="Keine Daten verfügbar">
                             <Minus className="h-3 w-3" />
                             Preisentwicklung
                          </div>
@@ -475,7 +475,7 @@ export function ConnectionsTable({
                   
                   {/* Expanded Content: Price History */}
                   {interval.priceHistory && interval.priceHistory.length > 1 && expandedItems.has(`preisverlauf-${index}`) && (
-                    <div className="mt-5 pt-5 border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-top-2 duration-200">
                        {/* Keine doppelte Box mehr, Chart direkt rendern */}
                        <PriceHistoryChart history={interval.priceHistory} title="Preisentwicklung dieser Verbindung" />
                     </div>
@@ -483,8 +483,8 @@ export function ConnectionsTable({
 
                   {/* Expanded Content: Journey Details */}
                   {(showAllJourneyDetails || expandedItems.has(index)) && (
-                    <div className="mt-5 pt-5 border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
-                      <div className="bg-gray-50 rounded-lg border border-gray-200 p-4">
+                    <div className="mt-5 pt-5 border-t border-gray-100 dark:border-gray-700 animate-in fade-in slide-in-from-top-2 duration-200">
+                      <div className="bg-gray-50 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
                         <JourneyTimelineHorizontal legs={interval.abschnitte ?? []} />
                       </div>
                     </div>
@@ -500,10 +500,10 @@ export function ConnectionsTable({
 }
 
 function getTrendIcon(history?: { preis: number }[]) {
-  if (!history || history.length < 2) return <Minus className="h-3 w-3 text-gray-400" />
+  if (!history || history.length < 2) return <Minus className="h-3 w-3 text-gray-400 dark:text-gray-500" />
   const firstPrice = history[0].preis
   const lastPrice = history[history.length - 1].preis
   if (lastPrice > firstPrice) return <TrendingUp className="h-3 w-3 text-red-500" />
   if (lastPrice < firstPrice) return <TrendingDown className="h-3 w-3 text-green-500" />
-  return <Minus className="h-3 w-3 text-gray-400" />
+  return <Minus className="h-3 w-3 text-gray-400 dark:text-gray-500" />
 }

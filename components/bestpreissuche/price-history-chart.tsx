@@ -16,7 +16,7 @@ interface PriceHistoryChartProps {
 
 function getTrend(history: PriceHistoryEntry[]) {
   if (history.length < 2) {
-    return { icon: <Minus className="h-4 w-4 text-gray-500" />, text: "Stabiler Preis", color: "text-gray-500", percentage: null }
+    return { icon: <Minus className="h-4 w-4 text-gray-500 dark:text-gray-400" />, text: "Stabiler Preis", color: "text-gray-500 dark:text-gray-400", percentage: null }
   }
   const firstPrice = history[0].preis
   const lastPrice = history[history.length - 1].preis
@@ -24,11 +24,11 @@ function getTrend(history: PriceHistoryEntry[]) {
   const percentage = firstPrice > 0 ? (change / firstPrice) * 100 : 0
 
   if (change > 0) {
-    return { icon: <TrendingUp className="h-4 w-4 text-red-500" />, text: "Preis gestiegen", color: "text-red-500", percentage }
+    return { icon: <TrendingUp className="h-4 w-4 text-red-500 dark:text-red-400" />, text: "Preis gestiegen", color: "text-red-500 dark:text-red-400", percentage }
   } else if (change < 0) {
-    return { icon: <TrendingDown className="h-4 w-4 text-green-500" />, text: "Preis gefallen", color: "text-green-500", percentage }
+    return { icon: <TrendingDown className="h-4 w-4 text-green-500 dark:text-green-400" />, text: "Preis gefallen", color: "text-green-500 dark:text-green-400", percentage }
   } else {
-    return { icon: <Minus className="h-4 w-4 text-gray-500" />, text: "Stabiler Preis", color: "text-gray-500", percentage: 0 }
+    return { icon: <Minus className="h-4 w-4 text-gray-500 dark:text-gray-400" />, text: "Stabiler Preis", color: "text-gray-500 dark:text-gray-400", percentage: 0 }
   }
 }
 
@@ -63,7 +63,7 @@ export const PriceHistoryChart = memo(function PriceHistoryChart({ history, titl
 
   if (!history || history.length < 1) {
     return (
-      <div className="text-center text-sm text-gray-500 py-4">
+      <div className="text-center text-sm text-gray-500 dark:text-gray-400 py-4">
         Keine Preishistorie vorhanden.
       </div>
     )
@@ -76,9 +76,9 @@ export const PriceHistoryChart = memo(function PriceHistoryChart({ history, titl
   ]
 
   return (
-    <div className="p-4 border rounded-lg bg-gray-50/50">
+    <div className="p-4 border rounded-lg bg-gray-50/50 dark:bg-gray-800/50">
       <div className="flex justify-between items-center mb-4">
-        <h4 className="font-semibold text-gray-800">{title}</h4>
+        <h4 className="font-semibold text-gray-800 dark:text-gray-200">{title}</h4>
         {trend && (
           <div className={`flex items-center gap-1 text-sm font-medium ${trend.color}`}>
             {trend.icon}
@@ -90,7 +90,7 @@ export const PriceHistoryChart = memo(function PriceHistoryChart({ history, titl
         )}
       </div>
       {history.length === 1 ? (
-        <div className="text-center text-sm text-gray-600 py-4">
+        <div className="text-center text-sm text-gray-600 dark:text-gray-400 py-4">
           Nur ein Datenpunkt vorhanden: {history[0].preis.toFixed(2)}€ am {new Date(history[0].recorded_at).toLocaleString('de-DE')}
         </div>
       ) : (

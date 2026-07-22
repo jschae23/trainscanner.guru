@@ -350,22 +350,22 @@ export function UrlauberfinderSearchForm({
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-2 sm:p-4 rounded-xl shadow-lg border border-gray-200">
+    <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-2 sm:p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
       <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4">
-        <h2 className="text-lg font-bold text-gray-800 sm:text-xl">
+        <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200 sm:text-xl">
           Urlaubsfinder
         </h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
         {/* Heimatbahnhof */}
-        <div className="bg-white p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100">
-          <h3 className="text-md font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2">
-            <MapPin className="w-4 h-4 text-blue-600" />
+        <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+          <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
+            <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             Heimatbahnhof
           </h3>
           <div className="relative">
-            <Label htmlFor="homeStation" className="text-sm font-medium text-gray-600 mb-2 block">
+            <Label htmlFor="homeStation" className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
               <span className="inline-flex items-center gap-1">
                 <MapPin className="w-4 h-4 text-blue-500" />
                 Von wo startest du?
@@ -384,7 +384,7 @@ export function UrlauberfinderSearchForm({
               autoComplete="off"
             />
             {homeError && (
-              <div className="absolute z-50 w-full mt-1 bg-amber-50 border border-amber-300 rounded-md shadow-sm p-2">
+              <div className="absolute z-50 w-full mt-1 bg-amber-50 dark:bg-amber-900/30 border border-amber-300 rounded-md shadow-sm p-2">
                 <p className="text-xs text-amber-800 flex items-center gap-1">
                   <AlertTriangle className="w-3 h-3" />
                   {homeError}
@@ -394,10 +394,10 @@ export function UrlauberfinderSearchForm({
             {showHomeSuggestions && homeSuggestions.length > 0 && (
               <div
                 ref={homeSuggestionsRef}
-                className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
+                className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto"
               >
                 {loadingHome && (
-                  <div className="p-2 text-sm text-gray-500 text-center flex items-center justify-center gap-2">
+                  <div className="p-2 text-sm text-gray-500 dark:text-gray-400 text-center flex items-center justify-center gap-2">
                     <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
                     Lädt...
                   </div>
@@ -407,7 +407,7 @@ export function UrlauberfinderSearchForm({
                     key={suggestion.extId}
                     type="button"
                     onClick={() => selectHomeSuggestion(suggestion)}
-                    className="w-full text-left px-3 py-2 hover:bg-blue-50 border-b border-gray-100 last:border-b-0 text-sm"
+                    className="w-full text-left px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 border-b border-gray-100 dark:border-gray-700 last:border-b-0 text-sm"
                   >
                     {suggestion.name}
                   </button>
@@ -418,13 +418,13 @@ export function UrlauberfinderSearchForm({
         </div>
 
         {/* Ziele */}
-        <div className="bg-white p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100">
+        <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
           <div className="flex items-center justify-between mb-2 sm:mb-3">
-            <h3 className="text-md font-semibold text-gray-700 flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-blue-600" />
+            <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               Reiseziele
             </h3>
-            <span className="text-xs text-gray-500 font-medium">
+            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
               {selectedDestinations.length} ausgewählt
             </span>
           </div>
@@ -434,35 +434,35 @@ export function UrlauberfinderSearchForm({
             <button
               type="button"
               onClick={() => togglePreset(ICE_STATIONS.filter(s => s.isDefault).map(s => s.name))}
-              className="text-xs px-2.5 py-1 rounded-full border border-blue-300 bg-blue-50 text-blue-700 hover:bg-blue-100 font-medium transition-colors"
+              className="text-xs px-2.5 py-1 rounded-full border border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900/40 font-medium transition-colors"
             >
               Großstädte
             </button>
             <button
               type="button"
               onClick={() => togglePreset(CURATED_SMALL_CITIES_PRESET.filter(name => ICE_STATIONS.some(s => s.name === name)))}
-              className="text-xs px-2.5 py-1 rounded-full border border-emerald-300 bg-emerald-50 text-emerald-700 hover:bg-emerald-100 font-medium transition-colors"
+              className="text-xs px-2.5 py-1 rounded-full border border-emerald-300 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 font-medium transition-colors"
             >
               Kleinere Städte (Top-Auswahl)
             </button>
             <button
               type="button"
               onClick={() => togglePreset(ICE_STATIONS.filter(s => s.region === "Europa").map(s => s.name))}
-              className="text-xs px-2.5 py-1 rounded-full border border-purple-300 bg-purple-50 text-purple-700 hover:bg-purple-100 font-medium transition-colors"
+              className="text-xs px-2.5 py-1 rounded-full border border-purple-300 bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-100 font-medium transition-colors"
             >
               Europäische Ziele
             </button>
             <button
               type="button"
               onClick={() => togglePreset(ICE_STATIONS.map(s => s.name))}
-              className="text-xs px-2.5 py-1 rounded-full border border-gray-300 bg-gray-50 text-gray-600 hover:bg-gray-100 font-medium transition-colors"
+              className="text-xs px-2.5 py-1 rounded-full border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 font-medium transition-colors"
             >
               Alle
             </button>
             <button
               type="button"
               onClick={() => setSelectedDestinations([])}
-              className="text-xs px-2.5 py-1 rounded-full border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 font-medium transition-colors"
+              className="text-xs px-2.5 py-1 rounded-full border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-100 font-medium transition-colors"
             >
               Keine
             </button>
@@ -473,7 +473,7 @@ export function UrlauberfinderSearchForm({
             {/* Großstädte */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Großstädte</h4>
+                <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Großstädte</h4>
                 <button
                   type="button"
                   onClick={() => {
@@ -482,7 +482,7 @@ export function UrlauberfinderSearchForm({
                     if (allSelected) setSelectedDestinations(prev => prev.filter(n => !names.includes(n)))
                     else setSelectedDestinations(prev => [...new Set([...prev, ...names])])
                   }}
-                  className="text-[10px] text-blue-600 hover:text-blue-800 font-semibold"
+                  className="text-[10px] text-blue-600 dark:text-blue-400 hover:text-blue-800 font-semibold"
                 >
                   alle ±
                 </button>
@@ -501,7 +501,7 @@ export function UrlauberfinderSearchForm({
                       className={`text-xs px-2.5 py-1 rounded-full border font-medium transition-all ${
                         checked
                           ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-white text-gray-600 border-gray-300 hover:border-blue-400 hover:text-blue-600"
+                          : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:text-blue-600"
                       }`}
                     >
                       {station.displayName.replace(" Hauptbahnhof", "")}
@@ -542,7 +542,7 @@ export function UrlauberfinderSearchForm({
                       className={`text-xs px-2.5 py-1 rounded-full border font-medium transition-all ${
                         checked
                           ? "bg-purple-600 text-white border-purple-600"
-                          : "bg-white text-gray-600 border-purple-200 hover:border-purple-400 hover:text-purple-600"
+                          : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-purple-200 dark:border-purple-800 hover:border-purple-400 hover:text-purple-600"
                       }`}
                     >
                       {station.displayName}
@@ -564,7 +564,7 @@ export function UrlauberfinderSearchForm({
                     if (allSelected) setSelectedDestinations(prev => prev.filter(n => !names.includes(n)))
                     else setSelectedDestinations(prev => [...new Set([...prev, ...names])])
                   }}
-                  className="text-[10px] text-indigo-500 hover:text-indigo-700 font-semibold"
+                  className="text-[10px] text-indigo-500 dark:text-indigo-400 hover:text-indigo-700 font-semibold"
                 >
                   alle ±
                 </button>
@@ -583,7 +583,7 @@ export function UrlauberfinderSearchForm({
                       className={`text-xs px-2.5 py-1 rounded-full border font-medium transition-all ${
                         checked
                           ? "bg-indigo-500 text-white border-indigo-500"
-                          : "bg-white text-gray-600 border-indigo-200 hover:border-indigo-400 hover:text-indigo-600"
+                          : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-indigo-200 dark:border-indigo-800 hover:border-indigo-400 hover:text-indigo-600"
                       }`}
                     >
                       {station.displayName}
@@ -596,7 +596,7 @@ export function UrlauberfinderSearchForm({
             {/* Weitere deutsche Städte */}
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <h4 className="text-xs font-bold text-gray-500 uppercase tracking-wider">Weitere deutsche Städte</h4>
+                <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Weitere deutsche Städte</h4>
                 <button
                   type="button"
                   onClick={() => {
@@ -605,7 +605,7 @@ export function UrlauberfinderSearchForm({
                     if (allSelected) setSelectedDestinations(prev => prev.filter(n => !names.includes(n)))
                     else setSelectedDestinations(prev => [...new Set([...prev, ...names])])
                   }}
-                  className="text-[10px] text-blue-600 hover:text-blue-800 font-semibold"
+                  className="text-[10px] text-blue-600 dark:text-blue-400 hover:text-blue-800 font-semibold"
                 >
                   alle ±
                 </button>
@@ -624,7 +624,7 @@ export function UrlauberfinderSearchForm({
                       className={`text-xs px-2.5 py-1 rounded-full border font-medium transition-all ${
                         checked
                           ? "bg-blue-600 text-white border-blue-600"
-                          : "bg-white text-gray-600 border-gray-300 hover:border-blue-400 hover:text-blue-600"
+                          : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:text-blue-600"
                       }`}
                     >
                       {station.displayName.replace(" Hauptbahnhof", "")}
@@ -637,9 +637,9 @@ export function UrlauberfinderSearchForm({
         </div>
 
         {/* Daten & Zeiten */}
-        <div className="bg-white p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100">
-          <h3 className="text-md font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-blue-600" />
+        <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+          <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
+            <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             Reisedaten
           </h3>
 
@@ -650,17 +650,17 @@ export function UrlauberfinderSearchForm({
               checked={includeReturnDate}
               onCheckedChange={checked => setIncludeReturnDate(!!checked)}
             />
-            <Label htmlFor="includeReturn" className="text-sm font-medium text-gray-600 cursor-pointer">
+            <Label htmlFor="includeReturn" className="text-sm font-medium text-gray-600 dark:text-gray-400 cursor-pointer">
               Mit Rückfahrt berechnen
             </Label>
           </div>
 
           <div className={`grid grid-cols-1 gap-3 ${includeReturnDate ? "sm:grid-cols-2" : ""}`}>
             {/* Hinfahrt block */}
-            <div className="min-w-0 overflow-hidden rounded-lg border border-blue-100 bg-blue-50/40 p-2 sm:p-3 space-y-2">
-              <p className="text-xs font-bold text-blue-700 uppercase tracking-wider mb-1">Hinfahrt</p>
+            <div className="min-w-0 overflow-hidden rounded-lg border border-blue-100 dark:border-blue-800 bg-blue-50/40 dark:bg-blue-900/20 p-2 sm:p-3 space-y-2">
+              <p className="text-xs font-bold text-blue-700 dark:text-blue-300 uppercase tracking-wider mb-1">Hinfahrt</p>
               <div>
-                <Label htmlFor="outwardDate" className="text-xs font-medium text-gray-600 mb-1 block">Datum</Label>
+                <Label htmlFor="outwardDate" className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Datum</Label>
                 <Input
                   id="outwardDate"
                   type="date"
@@ -679,7 +679,7 @@ export function UrlauberfinderSearchForm({
               </div>
               <div className="grid grid-cols-2 gap-2">
                 <div className="min-w-0">
-                  <Label htmlFor="outwardAbfahrtAb" className="text-xs font-medium text-gray-600 mb-1 block">Abfahrt ab</Label>
+                  <Label htmlFor="outwardAbfahrtAb" className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Abfahrt ab</Label>
                   <div className="relative">
                     <Input
                       id="outwardAbfahrtAb"
@@ -692,7 +692,7 @@ export function UrlauberfinderSearchForm({
                       <button
                         type="button"
                         onClick={() => setOutwardAbfahrtAb("")}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-700"
                         aria-label="Zurücksetzen"
                       >
                         <X className="w-3.5 h-3.5" />
@@ -701,7 +701,7 @@ export function UrlauberfinderSearchForm({
                   </div>
                 </div>
                 <div className="min-w-0">
-                  <Label htmlFor="outwardAnkunftBis" className="text-xs font-medium text-gray-600 mb-1 block">Ankunft bis</Label>
+                  <Label htmlFor="outwardAnkunftBis" className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Ankunft bis</Label>
                   <div className="relative">
                     <Input
                       id="outwardAnkunftBis"
@@ -714,7 +714,7 @@ export function UrlauberfinderSearchForm({
                       <button
                         type="button"
                         onClick={() => setOutwardAnkunftBis("")}
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-700"
                         aria-label="Zurücksetzen"
                       >
                         <X className="w-3.5 h-3.5" />
@@ -727,10 +727,10 @@ export function UrlauberfinderSearchForm({
 
             {/* Rückfahrt block */}
             {includeReturnDate && (
-              <div className="min-w-0 overflow-hidden rounded-lg border border-orange-100 bg-orange-50/40 p-2 sm:p-3 space-y-2">
-                <p className="text-xs font-bold text-orange-700 uppercase tracking-wider mb-1">Rückfahrt</p>
+              <div className="min-w-0 overflow-hidden rounded-lg border border-orange-100 bg-orange-50/40 dark:bg-orange-900/20 p-2 sm:p-3 space-y-2">
+                <p className="text-xs font-bold text-orange-700 dark:text-orange-300 uppercase tracking-wider mb-1">Rückfahrt</p>
                 <div>
-                  <Label htmlFor="returnDate" className="text-xs font-medium text-gray-600 mb-1 block">Datum</Label>
+                  <Label htmlFor="returnDate" className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Datum</Label>
                   <Input
                     id="returnDate"
                     type="date"
@@ -742,7 +742,7 @@ export function UrlauberfinderSearchForm({
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <div className="min-w-0">
-                    <Label htmlFor="returnAbfahrtAb" className="text-xs font-medium text-gray-600 mb-1 block">Abfahrt ab</Label>
+                    <Label htmlFor="returnAbfahrtAb" className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Abfahrt ab</Label>
                     <div className="relative">
                       <Input
                         id="returnAbfahrtAb"
@@ -755,7 +755,7 @@ export function UrlauberfinderSearchForm({
                         <button
                           type="button"
                           onClick={() => setReturnAbfahrtAb("")}
-                          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-700"
                           aria-label="Zurücksetzen"
                         >
                           <X className="w-3.5 h-3.5" />
@@ -764,7 +764,7 @@ export function UrlauberfinderSearchForm({
                     </div>
                   </div>
                   <div className="min-w-0">
-                    <Label htmlFor="returnAnkunftBis" className="text-xs font-medium text-gray-600 mb-1 block">Ankunft bis</Label>
+                    <Label htmlFor="returnAnkunftBis" className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Ankunft bis</Label>
                     <div className="relative">
                       <Input
                         id="returnAnkunftBis"
@@ -777,7 +777,7 @@ export function UrlauberfinderSearchForm({
                         <button
                           type="button"
                           onClick={() => setReturnAnkunftBis("")}
-                          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                          className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-700"
                           aria-label="Zurücksetzen"
                         >
                           <X className="w-3.5 h-3.5" />
@@ -792,14 +792,14 @@ export function UrlauberfinderSearchForm({
         </div>
 
         {/* Reisende & Ermäßigung */}
-        <div className="bg-white p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100">
-          <h3 className="text-md font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2">
-            <User className="w-4 h-4 text-blue-600" />
+        <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+          <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
+            <User className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             Reisende & Ermäßigung
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <Label className="text-sm font-medium text-gray-600 mb-1 block">
+              <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 block">
                 <span className="inline-flex items-center gap-1">
                   <Baby className="w-4 h-4 text-blue-500" />
                   Alter
@@ -818,7 +818,7 @@ export function UrlauberfinderSearchForm({
               </Select>
             </div>
             <div>
-              <Label className="text-sm font-medium text-gray-600 mb-1 block">
+              <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 block">
                 <span className="inline-flex items-center gap-1">
                   <Percent className="w-4 h-4 text-blue-500" />
                   Ermäßigung
@@ -858,7 +858,7 @@ export function UrlauberfinderSearchForm({
             </div>
           </div>
           <div className="mt-3">
-            <Label className="text-sm font-medium text-gray-600 mb-2 block">
+            <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
               <span className="inline-flex items-center gap-1">
                 <Train className="w-4 h-4 text-blue-500" />
                 Klasse
@@ -870,7 +870,7 @@ export function UrlauberfinderSearchForm({
                 className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border-2 ${
                   klasse === "KLASSE_1"
                     ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
                 }`}
                 onClick={() => setKlasse("KLASSE_1")}
               >
@@ -881,7 +881,7 @@ export function UrlauberfinderSearchForm({
                 className={`flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all border-2 ${
                   klasse === "KLASSE_2"
                     ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
                 }`}
                 onClick={() => setKlasse("KLASSE_2")}
               >
@@ -892,9 +892,9 @@ export function UrlauberfinderSearchForm({
         </div>
 
         {/* Optionen */}
-        <div className="bg-white p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100">
-          <h3 className="text-md font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2">
-            <Settings className="w-4 h-4 text-blue-600" />
+        <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+          <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
+            <Settings className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             Verbindungsoptionen
           </h3>
           <div className="space-y-3">
@@ -904,7 +904,7 @@ export function UrlauberfinderSearchForm({
                 className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-all border-2 ${
                   schnelleVerbindungen
                     ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
                 }`}
                 onClick={() => setSchnelleVerbindungen(!schnelleVerbindungen)}
               >
@@ -915,7 +915,7 @@ export function UrlauberfinderSearchForm({
                 className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-all border-2 ${
                   umstiegsOption === "direkt"
                     ? "bg-blue-600 text-white border-blue-600 shadow-sm"
-                    : "bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50"
+                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30"
                 }`}
                 onClick={() => setUmstiegsOption(umstiegsOption === "direkt" ? "alle" : "direkt")}
               >
@@ -925,7 +925,7 @@ export function UrlauberfinderSearchForm({
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label htmlFor="maxUmstiege" className="text-sm font-medium text-gray-600 mb-1 block">Max. Umstiege</Label>
+                <Label htmlFor="maxUmstiege" className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 block">Max. Umstiege</Label>
                 <Input
                   id="maxUmstiege"
                   type="number"
@@ -946,7 +946,7 @@ export function UrlauberfinderSearchForm({
                 />
               </div>
               <div>
-                <Label htmlFor="umstiegszeit" className="text-sm font-medium text-gray-600 mb-1 block">Mind. Umstiegszeit</Label>
+                <Label htmlFor="umstiegszeit" className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 block">Mind. Umstiegszeit</Label>
                 <Select value={umstiegszeit} onValueChange={setUmstiegszeit}>
                   <SelectTrigger className={ctrl}>
                     <SelectValue />

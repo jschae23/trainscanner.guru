@@ -483,8 +483,8 @@ export function TrainResults({ searchParams }: TrainResultsProps) {
   if (!loading && !isStreaming && (!validPriceResults || validPriceResults.length === 0)) {
     return (
         <div className="text-center py-8">
-          <p className="text-red-600 font-medium">Keine Bestpreise gefunden</p>
-          <p className="text-gray-600 text-sm mt-2">
+          <p className="text-red-600 dark:text-red-400 font-medium">Keine Bestpreise gefunden</p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">
             Bitte überprüfe die Bahnhofsnamen und versuche es erneut.
           </p>
         </div>
@@ -495,8 +495,8 @@ export function TrainResults({ searchParams }: TrainResultsProps) {
   if (!loading && !isStreaming && prices.length === 0) {
     return (
         <div className="text-center py-8">
-          <p className="text-orange-600 font-medium">Keine Preise verfügbar</p>
-          <p className="text-gray-600 text-sm mt-2">Für den gewählten Zeitraum sind keine Bestpreise verfügbar.</p>
+          <p className="text-orange-600 dark:text-orange-400 font-medium">Keine Preise verfügbar</p>
+          <p className="text-gray-600 dark:text-gray-400 text-sm mt-2">Für den gewählten Zeitraum sind keine Bestpreise verfügbar.</p>
         </div>
     )
   }
@@ -507,7 +507,7 @@ export function TrainResults({ searchParams }: TrainResultsProps) {
         <div ref={calendarRef}>
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
             Preiskalender
-            <span className="text-sm font-normal text-gray-500">(Klicken zum Buchen)</span>
+            <span className="text-sm font-normal text-gray-500 dark:text-gray-400">(Klicken zum Buchen)</span>
           </h3>
           <PriceCalendar
               results={priceResults}

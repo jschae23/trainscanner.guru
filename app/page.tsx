@@ -3,6 +3,7 @@ import { TrainResults } from "@/components/bestpreissuche/train-results"
 import { Footer } from "@/components/layout/footer"
 import { BrandLogo } from "@/components/layout/brand-logo"
 import { MainNavigation } from "@/components/layout/main-navigation"
+import { ThemeToggle } from "@/components/layout/theme-toggle"
 import { isFooterEnabled, isUrlaubsfinderEnabled } from "@/lib/shared/feature-flags"
 import { redirect } from "next/navigation"
 
@@ -81,7 +82,7 @@ export default async function Page({
   const footerEnabled = isFooterEnabled()
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       <div className="container mx-auto px-4 py-6 max-w-6xl">
         <header className="mb-6">
           <div className="flex items-center justify-between gap-4">
@@ -91,8 +92,9 @@ export default async function Page({
                 <BrandLogo />
               </h1>
             </div>
-            <div className="hidden sm:block">
+            <div className="hidden sm:flex items-center gap-2">
               <MainNavigation active="bestpreissuche" showUrlaubsfinder={urlaubsfinderEnabled} />
+              <ThemeToggle />
             </div>
           </div>
         </header>

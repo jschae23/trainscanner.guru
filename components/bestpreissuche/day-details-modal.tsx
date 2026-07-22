@@ -267,9 +267,9 @@ export function DayDetailsModal({
     const minIntervalPrice = Math.min(...intervals.map((i) => i.preis))
     const maxIntervalPrice = Math.max(...intervals.map((i) => i.preis))
 
-    if (price === minIntervalPrice) return "text-green-600 bg-green-50"
-    if (price === maxIntervalPrice) return "text-red-600 bg-red-50"
-    return "text-orange-600 bg-orange-50"
+    if (price === minIntervalPrice) return "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30"
+    if (price === maxIntervalPrice) return "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30"
+    return "text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30"
   }
 
   const swipeDirection = direction
@@ -299,11 +299,11 @@ export function DayDetailsModal({
     const timeStr = recordedDate.toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' })
     
     if (ageMinutes < 1) {
-      return { text: 'gerade eben aktualisiert', color: 'text-green-600', timeStr }
+      return { text: 'gerade eben aktualisiert', color: 'text-green-600 dark:text-green-400', timeStr }
     } else if (ageMinutes < 60) {
-      return { text: `vor ${ageMinutes} Min. aktualisiert`, color: 'text-green-600', timeStr }
+      return { text: `vor ${ageMinutes} Min. aktualisiert`, color: 'text-green-600 dark:text-green-400', timeStr }
     } else {
-      return { text: `vor ${ageHours}h ${ageMinutes % 60}min aktualisiert`, color: 'text-orange-600', timeStr }
+      return { text: `vor ${ageHours}h ${ageMinutes % 60}min aktualisiert`, color: 'text-orange-600 dark:text-orange-400', timeStr }
     }
   }
 
@@ -312,14 +312,14 @@ export function DayDetailsModal({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
-        className="max-w-6xl max-h-[95vh] overflow-y-auto sm:px-4 px-3 sm:m-0 rounded-lg shadow-lg border bg-white"
+        className="max-w-6xl max-h-[95vh] overflow-y-auto sm:px-4 px-3 sm:m-0 rounded-lg shadow-lg border bg-white dark:bg-gray-800"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onKeyDown={handleKeyDown} // Handler direkt am Content
       >
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-xl">
-            <Calendar className="h-5 w-5 text-blue-600" />
+            <Calendar className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             <span className="hidden sm:inline">{formattedDate}</span>
             <span className="sm:hidden">{shortDate}</span>
             {isWeekend && <Badge variant="secondary">Wochenende</Badge>}
@@ -342,7 +342,7 @@ export function DayDetailsModal({
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Vorheriger Tag
               </Button>
-              <span className="text-sm text-gray-500 mx-4 bg-gray-100 px-3 py-1 rounded">
+              <span className="text-sm text-gray-500 dark:text-gray-400 mx-4 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded">
                 Tag {date && dayKeys.indexOf(date) + 1} von {dayKeys.length}
               </span>
               <Button 
@@ -369,7 +369,7 @@ export function DayDetailsModal({
               >
                 <ChevronLeft className="h-5 w-5" />
               </Button>
-              <span className="text-sm text-gray-700 font-medium">
+              <span className="text-sm text-gray-700 dark:text-gray-300 font-medium">
                 {date && dayKeys.indexOf(date) + 1}/{dayKeys.length}
               </span>
               <Button 
@@ -388,7 +388,7 @@ export function DayDetailsModal({
 
         {/* Swipe-Hinweis für Mobile */}
         {onNavigateDay && dayKeys.length > 1 && (
-          <div className="md:hidden text-center text-xs text-gray-400 pb-0 pt-0">
+          <div className="md:hidden text-center text-xs text-gray-400 dark:text-gray-500 pb-0 pt-0">
             Wische nach links/rechts um zwischen Tagen zu wechseln
           </div>
         )}
@@ -408,14 +408,14 @@ export function DayDetailsModal({
             >
               <div className="space-y-6">
                 {/* Strecken-Info Header */}
-                <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg relative">
+                <div className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 p-4 rounded-lg relative">
                   {/* Datenstand-Anzeige: Mobile oben in der Box, Desktop oben rechts */}
                   {dataAge && (
                     <>
                       {/* Desktop: oben rechts */}
                       <div className="hidden sm:block absolute top-3 right-3">
                         <div
-                          className={`flex items-center gap-1 px-2 py-0.5 rounded-full border ${dataAge.color} bg-white/70 shadow-sm text-xs font-medium`}
+                          className={`flex items-center gap-1 px-2 py-0.5 rounded-full border ${dataAge.color} bg-white/70 dark:bg-gray-800/70 shadow-sm text-xs font-medium`}
                           style={{
                             borderWidth: 1,
                             minHeight: 28,
@@ -432,7 +432,7 @@ export function DayDetailsModal({
                       {/* Mobile: oben in der Box, über den Stationsnamen */}
                       <div className="block sm:hidden mb-2">
                         <div
-                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border ${dataAge.color} bg-white/70 shadow-sm text-xs font-medium max-w-full whitespace-nowrap`}
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full border ${dataAge.color} bg-white/70 dark:bg-gray-800/70 shadow-sm text-xs font-medium max-w-full whitespace-nowrap`}
                           style={{
                             borderWidth: 1,
                             minHeight: 28,
@@ -448,14 +448,14 @@ export function DayDetailsModal({
                       </div>
                     </>
                   )}
-                  <div className="flex items-center gap-2 text-blue-700 text-lg font-semibold mb-3">
+                  <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300 text-lg font-semibold mb-3">
                     <MapPin className="h-5 w-5" />
                     <span>{startStation?.name}</span>
-                    <ArrowRight className="h-5 w-5 text-gray-400" />
+                    <ArrowRight className="h-5 w-5 text-gray-400 dark:text-gray-500" />
                     <span>{zielStation?.name}</span>
                   </div>
                   {/* Gruppe 1: Reisende & Ticket */}
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700">
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700 dark:text-gray-300">
                     <div className="flex items-center gap-1">
                       <User className="w-4 h-4" />
                       {getAlterLabel(searchParams.alter)}
@@ -472,7 +472,7 @@ export function DayDetailsModal({
                     </div>
                   </div>
                   {/* Gruppe 2: Reiseoptionen */}
-                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700 mt-2 pt-2 border-t border-blue-100">
+                  <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-700 dark:text-gray-300 mt-2 pt-2 border-t border-blue-100 dark:border-blue-800">
                     {searchParams.abfahrtAb && (
                       <div className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />
@@ -518,18 +518,18 @@ export function DayDetailsModal({
 
                 {/* Kompakte Preisstatistik über der Tabelle */}
                 {hasMultipleIntervals && (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded px-3 py-2 mb-2 text-xs flex flex-wrap gap-4 justify-center">
+                  <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 rounded px-3 py-2 mb-2 text-xs flex flex-wrap gap-4 justify-center">
                     <div className="flex items-center gap-1">
-                      <span className="text-gray-600">Günstigste:</span>
-                      <span className="font-bold text-green-600">{Math.min(...intervals.map((i: any) => i.preis))}€</span>
+                      <span className="text-gray-600 dark:text-gray-400">Günstigste:</span>
+                      <span className="font-bold text-green-600 dark:text-green-400">{Math.min(...intervals.map((i: any) => i.preis))}€</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <span className="text-gray-600">Durchschnitt:</span>
-                      <span className="font-bold text-blue-600">{Math.round(intervals.reduce((sum: number, i: any) => sum + i.preis, 0) / intervals.length)}€</span>
+                      <span className="text-gray-600 dark:text-gray-400">Durchschnitt:</span>
+                      <span className="font-bold text-blue-600 dark:text-blue-400">{Math.round(intervals.reduce((sum: number, i: any) => sum + i.preis, 0) / intervals.length)}€</span>
                     </div>
                     <div className="flex items-center gap-1">
-                      <span className="text-gray-600">Teuerste:</span>
-                      <span className="font-bold text-red-600">{Math.max(...intervals.map((i: any) => i.preis))}€</span>
+                      <span className="text-gray-600 dark:text-gray-400">Teuerste:</span>
+                      <span className="font-bold text-red-600 dark:text-red-400">{Math.max(...intervals.map((i: any) => i.preis))}€</span>
                     </div>
                   </div>
                 )}

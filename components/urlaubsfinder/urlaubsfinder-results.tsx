@@ -32,7 +32,7 @@ const DynamicLeaflet = dynamic(
     ssr: false,
     loading: () => (
       <div
-        className="w-full flex items-center justify-center text-gray-400 text-sm bg-gray-50"
+        className="w-full flex items-center justify-center text-gray-400 dark:text-gray-500 text-sm bg-gray-50 dark:bg-gray-800"
         style={{ height: 420 }}
       >
         Karte wird geladen...
@@ -149,9 +149,9 @@ function JourneyBlock({
   legs?: JourneyLeg[]
 }) {
   const isOut = direction === "out"
-  const accent = isOut ? "text-blue-600" : "text-orange-500"
-  const borderCls = isOut ? "border-blue-200" : "border-orange-200"
-  const bgCls = isOut ? "bg-blue-50/70" : "bg-orange-50/70"
+  const accent = isOut ? "text-blue-600 dark:text-blue-400" : "text-orange-500 dark:text-orange-400"
+  const borderCls = isOut ? "border-blue-200 dark:border-blue-800" : "border-orange-200 dark:border-orange-800"
+  const bgCls = isOut ? "bg-blue-50/70 dark:bg-blue-900/30" : "bg-orange-50/70 dark:bg-orange-900/20"
 
   return (
     <div className={`min-w-0 rounded-lg border ${borderCls} ${bgCls} p-4 md:p-5`}>
@@ -163,18 +163,18 @@ function JourneyBlock({
           {price.toFixed(2)} €
         </span>
       </div>
-      <div className="flex items-center gap-2 text-lg font-bold text-gray-900 mb-2.5">
+      <div className="flex items-center gap-2 text-lg font-bold text-gray-900 dark:text-gray-100 mb-2.5">
         <span className="tabular-nums">{formatTime(departure)}</span>
-        <ArrowRight className="w-4 h-4 text-gray-400 flex-shrink-0" />
+        <ArrowRight className="w-4 h-4 text-gray-400 dark:text-gray-500 flex-shrink-0" />
         <span className="tabular-nums">{formatTime(arrival)}</span>
         {departure && arrival && (
-          <span className="text-xs text-gray-500 font-medium ml-0.5">
+          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium ml-0.5">
             ({formatDuration(departure, arrival)})
           </span>
         )}
       </div>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-gray-500 dark:text-gray-400">
           {transfers === 0
             ? "Direktverbindung"
             : transfers !== undefined && transfers > 0
@@ -197,10 +197,10 @@ function JourneyBlock({
       </div>
       {legs && legs.length > 0 && (
         <div className="mt-4 pt-4 border-t border-white/80">
-          <div className="hidden min-w-0 overflow-x-auto md:block rounded-lg border border-gray-200 bg-white p-4 pb-5">
+          <div className="hidden min-w-0 overflow-x-auto md:block rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 pb-5">
             <JourneyTimelineHorizontal legs={legs} />
           </div>
-          <div className="md:hidden rounded-lg border border-gray-200 bg-white p-3">
+          <div className="md:hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-3">
             <JourneyTimelineVertical legs={legs} />
           </div>
         </div>
@@ -239,7 +239,7 @@ function ResultCard({
       : 0
   const isBest = rank === 1
   const tier = priceRange > 0 ? (result.totalPrice - minPrice) / priceRange : 0
-  const cardBg = isBest ? "bg-green-50" : tier < 0.33 ? "bg-white" : tier < 0.66 ? "bg-amber-50" : "bg-red-50"
+  const cardBg = isBest ? "bg-green-50 dark:bg-green-900/30" : tier < 0.33 ? "bg-white dark:bg-gray-800" : tier < 0.66 ? "bg-amber-50 dark:bg-amber-900/30" : "bg-red-50 dark:bg-red-900/30"
   const leftBorder = isBest
     ? "border-l-8 border-l-green-500"
     : tier < 0.33
@@ -248,7 +248,7 @@ function ResultCard({
     ? "border-l-8 border-l-amber-400"
     : "border-l-8 border-l-red-400"
   const priceTone =
-    tier < 0.33 ? "text-green-600 bg-green-50" : tier < 0.66 ? "text-orange-600 bg-orange-50" : "text-red-600 bg-red-50"
+    tier < 0.33 ? "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30" : tier < 0.66 ? "text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/30" : "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30"
   const outwardTransferLabel =
     result.outwardTransfers === 0
       ? "Direkt"
@@ -302,20 +302,20 @@ function ResultCard({
     <>
       <div
         id={`result-card-${encodeURIComponent(result.destination)}`}
-        className={`rounded-2xl relative text-sm shadow-sm transition-all hover:shadow-md border bg-white ${leftBorder} ${cardBg} ${
-          isExpanded ? "ring-2 ring-blue-200" : ""
+        className={`rounded-2xl relative text-sm shadow-sm transition-all hover:shadow-md border bg-white dark:bg-gray-800 ${leftBorder} ${cardBg} ${
+          isExpanded ? "ring-2 ring-blue-200 dark:ring-blue-800" : ""
         }`}
       >
         <div className="md:hidden p-4">
           <div className="flex items-center justify-between gap-3 mb-3">
             <div className="flex items-center gap-3 min-w-0">
-              <Badge className={isBest ? "bg-green-100 text-green-800 border border-green-400 rounded-full" : "bg-gray-100 text-gray-700 border border-gray-200 rounded-full"}>
+              <Badge className={isBest ? "bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200 border border-green-400 rounded-full" : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600 rounded-full"}>
                 {isBest ? <Trophy className="w-3 h-3 mr-1" /> : null}
                 #{rank}
               </Badge>
               <div className="min-w-0">
-                <div className="font-bold text-gray-900 text-base truncate">{result.destination.replace(" Hbf", "")}</div>
-                <div className="text-xs text-gray-500 truncate">{formatDate(result.outwardDeparture)}</div>
+                <div className="font-bold text-gray-900 dark:text-gray-100 text-base truncate">{result.destination.replace(" Hbf", "")}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 truncate">{formatDate(result.outwardDeparture)}</div>
               </div>
             </div>
             <div className={`text-2xl font-bold px-3 py-2 rounded-lg ${priceTone}`}>
@@ -323,33 +323,33 @@ function ResultCard({
             </div>
           </div>
 
-          <div className="py-3 border-t border-b border-gray-200 space-y-2">
+          <div className="py-3 border-t border-b border-gray-200 dark:border-gray-700 space-y-2">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <div className="text-xs text-gray-500 mb-1">Hinfahrt</div>
-                <div className="font-semibold text-sm text-gray-900">
-                  {formatTime(result.outwardDeparture)} <ArrowRight className="inline h-3 w-3 mx-1 text-gray-400" /> {formatTime(result.outwardArrival)}
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Hinfahrt</div>
+                <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
+                  {formatTime(result.outwardDeparture)} <ArrowRight className="inline h-3 w-3 mx-1 text-gray-400 dark:text-gray-500" /> {formatTime(result.outwardArrival)}
                 </div>
-                <div className="text-xs text-gray-500 mt-1">{formatDuration(result.outwardDeparture, result.outwardArrival)}</div>
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{formatDuration(result.outwardDeparture, result.outwardArrival)}</div>
               </div>
               <div>
-                <div className="text-xs text-gray-500 mb-1">Rückfahrt</div>
-                <div className="font-semibold text-sm text-gray-900">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Rückfahrt</div>
+                <div className="font-semibold text-sm text-gray-900 dark:text-gray-100">
                   {result.returnDeparture ? (
                     <>
-                      {formatTime(result.returnDeparture)} <ArrowRight className="inline h-3 w-3 mx-1 text-gray-400" /> {formatTime(result.returnArrival ?? "")}
+                      {formatTime(result.returnDeparture)} <ArrowRight className="inline h-3 w-3 mx-1 text-gray-400 dark:text-gray-500" /> {formatTime(result.returnArrival ?? "")}
                     </>
                   ) : "–"}
                 </div>
-                <div className="text-xs text-gray-500 mt-1">
+                <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                   {result.returnDeparture ? formatDuration(result.returnDeparture, result.returnArrival ?? "") : ""}
                 </div>
               </div>
             </div>
             <div className="flex flex-wrap gap-1.5">
-              <Badge variant="outline" className="text-blue-700 border-blue-200 bg-white/70">Hin: {outwardTransferLabel}</Badge>
-              {result.returnDate && <Badge variant="outline" className="text-orange-700 border-orange-200 bg-white/70">Rück: {returnTransferLabel}</Badge>}
-              {isBest && <Badge className="bg-green-100 text-green-800 border border-green-400 rounded-full">Bestpreis</Badge>}
+              <Badge variant="outline" className="text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 bg-white/70 dark:bg-gray-800/70">Hin: {outwardTransferLabel}</Badge>
+              {result.returnDate && <Badge variant="outline" className="text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800 bg-white/70 dark:bg-gray-800/70">Rück: {returnTransferLabel}</Badge>}
+              {isBest && <Badge className="bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200 border border-green-400 rounded-full">Bestpreis</Badge>}
             </div>
           </div>
 
@@ -369,51 +369,51 @@ function ResultCard({
         <div className="hidden md:grid grid-cols-[minmax(190px,2.4fr)_minmax(150px,1.6fr)_minmax(150px,1.6fr)_minmax(105px,1fr)_minmax(95px,0.9fr)_minmax(115px,0.9fr)] gap-4 lg:gap-6 items-center min-h-[96px] p-6">
           <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <div className="font-bold text-lg text-gray-900 leading-snug break-words">{result.destination.replace(" Hbf", "")}</div>
+              <div className="font-bold text-lg text-gray-900 dark:text-gray-100 leading-snug break-words">{result.destination.replace(" Hbf", "")}</div>
               {isBest && (
-                <Badge className="bg-green-100 text-green-800 border border-green-400 rounded-full flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
+                <Badge className="bg-green-100 dark:bg-green-900/40 text-green-800 dark:text-green-200 border border-green-400 rounded-full flex items-center gap-1 px-2 py-1 font-semibold shadow-sm">
                   <Trophy className="h-3 w-3" />
                   Bestpreis
                 </Badge>
               )}
             </div>
-            <div className="text-xs text-gray-500 mt-1 leading-snug">
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-snug">
               {formatDate(result.outwardDeparture)}
               {result.returnDate ? ` · Rück ${formatDate(result.returnDeparture || result.returnDate)}` : ""}
             </div>
           </div>
 
           <div>
-            <div className="font-bold text-lg text-gray-900">
+            <div className="font-bold text-lg text-gray-900 dark:text-gray-100">
               {formatTime(result.outwardDeparture)}
-              <ArrowRight className="inline h-4 w-4 mx-2 text-gray-300" />
+              <ArrowRight className="inline h-4 w-4 mx-2 text-gray-300 dark:text-gray-600" />
               {formatTime(result.outwardArrival)}
             </div>
-            <div className="text-xs text-gray-500 mt-1">{formatDuration(result.outwardDeparture, result.outwardArrival)} · {result.outwardPrice.toFixed(0)}€</div>
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{formatDuration(result.outwardDeparture, result.outwardArrival)} · {result.outwardPrice.toFixed(0)}€</div>
           </div>
 
           <div>
-            <div className="font-bold text-lg text-gray-900">
+            <div className="font-bold text-lg text-gray-900 dark:text-gray-100">
               {result.returnDeparture ? (
                 <>
                   {formatTime(result.returnDeparture)}
-                  <ArrowRight className="inline h-4 w-4 mx-2 text-gray-300" />
+                  <ArrowRight className="inline h-4 w-4 mx-2 text-gray-300 dark:text-gray-600" />
                   {formatTime(result.returnArrival ?? "")}
                 </>
               ) : "–"}
             </div>
-            <div className="text-xs text-gray-500 mt-1">
+            <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
               {result.returnDeparture ? `${formatDuration(result.returnDeparture, result.returnArrival ?? "")} · ${(result.returnPrice ?? 0).toFixed(0)}€` : "Keine Rückfahrt"}
             </div>
           </div>
 
           <div>
-            <div className="font-medium text-gray-900 flex items-center gap-1">
-              <RotateCcw className="h-3.5 w-3.5 text-gray-400" />
+            <div className="font-medium text-gray-900 dark:text-gray-100 flex items-center gap-1">
+              <RotateCcw className="h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
               {outwardTransferLabel}
             </div>
             {result.returnDate && (
-              <div className="text-xs text-gray-500 mt-1">Rück: {returnTransferLabel}</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">Rück: {returnTransferLabel}</div>
             )}
           </div>
 
@@ -422,7 +422,7 @@ function ResultCard({
               {result.totalPrice.toFixed(0)}€
             </div>
             {deltaVsAverage !== 0 && (
-              <div className={`text-xs font-medium mt-1 ${deltaVsAverage > 0 ? "text-green-600" : "text-red-600"}`}>
+              <div className={`text-xs font-medium mt-1 ${deltaVsAverage > 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"}`}>
                 {deltaVsAverage > 0 ? `-${deltaVsAverage}% ggü. Ø` : `+${Math.abs(deltaVsAverage)}% ggü. Ø`}
               </div>
             )}
@@ -441,7 +441,7 @@ function ResultCard({
         </div>
 
         {isExpanded && (
-          <div className="border-t border-gray-100 px-4 md:px-6 pb-4 md:pb-6 pt-4 md:pt-5 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="border-t border-gray-100 dark:border-gray-700 px-4 md:px-6 pb-4 md:pb-6 pt-4 md:pt-5 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="grid gap-3">
               <JourneyBlock
                 direction="out"
@@ -464,9 +464,9 @@ function ResultCard({
               />
               )}
             </div>
-            <div className="flex items-center justify-between rounded-lg bg-gray-50 border border-gray-200 px-4 py-3">
-              <span className="text-sm font-semibold text-gray-600">Gesamtpreis</span>
-              <span className="text-xl font-black text-gray-900 tabular-nums">
+            <div className="flex items-center justify-between rounded-lg bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 px-4 py-3">
+              <span className="text-sm font-semibold text-gray-600 dark:text-gray-400">Gesamtpreis</span>
+              <span className="text-xl font-black text-gray-900 dark:text-gray-100 tabular-nums">
                 {result.totalPrice.toFixed(2)} €
               </span>
             </div>
@@ -518,19 +518,19 @@ export function UrlauberfinderResults({
   return (
     <div className="space-y-4">
       {isLoading && (
-        <div className="bg-white rounded-2xl border border-gray-200 shadow-sm px-4 py-3">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm px-4 py-3">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2 min-w-0">
-              <Loader2 className="w-4 h-4 animate-spin text-blue-600 flex-shrink-0" />
-              <p className="text-sm font-semibold text-gray-700 truncate">
+              <Loader2 className="w-4 h-4 animate-spin text-blue-600 dark:text-blue-400 flex-shrink-0" />
+              <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 truncate">
                 {progress ? (
                   <>
                     Suche{" "}
-                    <span className="text-blue-600">
+                    <span className="text-blue-600 dark:text-blue-400">
                       {progress.destination.replace(" Hbf", "")}
                     </span>
                     {"  "}
-                    <span className="text-gray-400 font-normal text-xs">
+                    <span className="text-gray-400 dark:text-gray-500 font-normal text-xs">
                       ({progress.processed}/{progress.total})
                     </span>
                   </>
@@ -548,14 +548,14 @@ export function UrlauberfinderResults({
               </button>
             )}
           </div>
-          <div className="w-full bg-gray-100 rounded-full h-1.5 overflow-hidden">
+          <div className="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-1.5 overflow-hidden">
             <div
               className="bg-blue-600 h-full rounded-full transition-all duration-500 ease-out"
               style={{ width: `${progressPercent || (isLoading ? 2 : 0)}%` }}
             />
           </div>
           {hasResults && (
-            <p className="text-[11px] text-gray-400 mt-1.5">
+            <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-1.5">
               {results.length} Ziel{results.length !== 1 ? "e" : ""} gefunden
               {" "}· wird aktualisiert...
             </p>
@@ -564,10 +564,10 @@ export function UrlauberfinderResults({
       )}
 
       {!isLoading && !hasResults && !hasUnavailable && (
-        <div className="bg-white rounded-2xl border border-gray-200 p-10 text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-10 text-center">
           <AlertCircle className="w-9 h-9 text-amber-400 mx-auto mb-3" />
-          <p className="font-semibold text-gray-800 mb-1">Keine Ergebnisse</p>
-          <p className="text-sm text-gray-500">
+          <p className="font-semibold text-gray-800 dark:text-gray-200 mb-1">Keine Ergebnisse</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             Für die gewählten Kriterien wurden keine Verbindungen gefunden.
             Versuche andere Daten oder Ziele.
           </p>
@@ -577,15 +577,15 @@ export function UrlauberfinderResults({
       {hasResults && (
         <>
           {hasMapData && (
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
               <div className="flex items-center gap-2 mb-3">
-                <MapPin className="w-4 h-4 text-blue-600" />
-                <span className="font-semibold text-blue-800 text-sm">Karte</span>
-                <span className="ml-auto text-xs text-blue-700">
+                <MapPin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <span className="font-semibold text-blue-800 dark:text-blue-300 text-sm">Karte</span>
+                <span className="ml-auto text-xs text-blue-700 dark:text-blue-400">
                   {results.length} Ziele
                 </span>
               </div>
-              <div className="overflow-hidden rounded-lg border border-blue-200 bg-white shadow-sm">
+              <div className="overflow-hidden rounded-lg border border-blue-200 dark:border-blue-800 bg-white dark:bg-gray-800 shadow-sm">
                 <DynamicLeaflet
                   destinations={results}
                   homeStation={homeStation}
@@ -597,14 +597,14 @@ export function UrlauberfinderResults({
             </div>
           )}
 
-          <div className="bg-blue-50 p-4 rounded-lg">
+          <div className="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4 gap-2 md:gap-0">
-              <h3 className="font-semibold text-blue-800 flex items-center gap-2">
+              <h3 className="font-semibold text-blue-800 dark:text-blue-300 flex items-center gap-2">
                 <TrendingDown className="w-4 h-4" />
                 Günstigste Ziele
-                <span className="text-blue-700">({results.length})</span>
+                <span className="text-blue-700 dark:text-blue-400">({results.length})</span>
               </h3>
-              <div className="flex flex-wrap items-center gap-3 text-xs text-blue-700">
+              <div className="flex flex-wrap items-center gap-3 text-xs text-blue-700 dark:text-blue-400">
                 <span className="flex items-center gap-1">
                   <span className="w-2 h-2 rounded-full bg-green-500 inline-block" />
                   Bestpreis
@@ -621,7 +621,7 @@ export function UrlauberfinderResults({
             </div>
 
             <div className="mb-2 hidden md:block">
-              <div className="grid grid-cols-[minmax(190px,2.4fr)_minmax(150px,1.6fr)_minmax(150px,1.6fr)_minmax(105px,1fr)_minmax(95px,0.9fr)_minmax(115px,0.9fr)] gap-4 lg:gap-6 text-xs font-semibold select-none sticky top-0 bg-blue-50 z-10 border-b border-blue-200 pb-2 px-5 text-gray-600">
+              <div className="grid grid-cols-[minmax(190px,2.4fr)_minmax(150px,1.6fr)_minmax(150px,1.6fr)_minmax(105px,1fr)_minmax(95px,0.9fr)_minmax(115px,0.9fr)] gap-4 lg:gap-6 text-xs font-semibold select-none sticky top-0 bg-blue-50 dark:bg-blue-900/30 z-10 border-b border-blue-200 dark:border-blue-800 pb-2 px-5 text-gray-600 dark:text-gray-400">
                 <div>Ziel</div>
                 <div>Hinfahrt</div>
                 <div>Rückfahrt</div>
@@ -657,13 +657,13 @@ export function UrlauberfinderResults({
       )}
 
       {hasUnavailable && (
-        <div className="bg-white rounded-2xl border border-amber-200 shadow-sm overflow-hidden">
-          <div className="px-4 py-2.5 border-b border-amber-100 flex items-center gap-2 bg-amber-50">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-amber-200 dark:border-amber-800 shadow-sm overflow-hidden">
+          <div className="px-4 py-2.5 border-b border-amber-100 dark:border-amber-800 flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30">
             <AlertCircle className="w-4 h-4 text-amber-600" />
-            <span className="font-semibold text-sm text-amber-900">
+            <span className="font-semibold text-sm text-amber-900 dark:text-amber-300">
               Nicht verfügbare Ziele
             </span>
-            <span className="ml-auto text-xs text-amber-700">
+            <span className="ml-auto text-xs text-amber-700 dark:text-amber-400">
               {unavailableResults.length}
             </span>
           </div>
@@ -671,16 +671,16 @@ export function UrlauberfinderResults({
             {unavailableResults.map((item) => (
               <div
                 key={item.destination}
-                className="rounded-xl border border-amber-200 bg-amber-50/60 px-3 py-2.5"
+                className="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50/60 dark:bg-amber-900/20 px-3 py-2.5"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-semibold text-sm text-gray-900 truncate">
+                    <p className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">
                       {item.destination.replace(" Hbf", "")}
                     </p>
-                    <p className="text-xs text-amber-800 mt-0.5">{item.reason}</p>
+                    <p className="text-xs text-amber-800 dark:text-amber-300 mt-0.5">{item.reason}</p>
                   </div>
-                  <div className="text-right text-[11px] text-amber-900">
+                  <div className="text-right text-[11px] text-amber-900 dark:text-amber-300">
                     {item.outwardPrice !== undefined && (
                       <p>Hin: {item.outwardPrice.toFixed(2)} €</p>
                     )}

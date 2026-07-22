@@ -19,20 +19,20 @@ export interface JourneyLeg {
 function getVehicleTypeStyle(produktGattung?: string) {
   switch (produktGattung) {
     case "ICE":
-      return { color: "text-red-600", bg: "bg-red-50", border: "border-red-200" }
+      return { color: "text-red-600 dark:text-red-400", bg: "bg-red-50 dark:bg-red-900/30", border: "border-red-200 dark:border-red-700" }
     case "EC_IC":
     case "IC":
     case "EC":
-      return { color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-200" }
+      return { color: "text-blue-600 dark:text-blue-400", bg: "bg-blue-50 dark:bg-blue-900/30", border: "border-blue-200 dark:border-blue-700" }
     case "IR":
     case "REGIONAL":
-      return { color: "text-green-600", bg: "bg-green-50", border: "border-green-200" }
+      return { color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-900/30", border: "border-green-200 dark:border-green-700" }
     case "SBAHN":
-      return { color: "text-purple-600", bg: "bg-purple-50", border: "border-purple-200" }
+      return { color: "text-purple-600 dark:text-purple-400", bg: "bg-purple-50 dark:bg-purple-900/30", border: "border-purple-200 dark:border-purple-700" }
     case "BUS":
-      return { color: "text-orange-600", bg: "bg-orange-50", border: "border-orange-200" }
+      return { color: "text-orange-600 dark:text-orange-400", bg: "bg-orange-50 dark:bg-orange-900/30", border: "border-orange-200 dark:border-orange-700" }
     default:
-      return { color: "text-gray-600", bg: "bg-gray-50", border: "border-gray-200" }
+      return { color: "text-gray-600 dark:text-gray-400", bg: "bg-gray-50 dark:bg-gray-800", border: "border-gray-200 dark:border-gray-700" }
   }
 }
 
@@ -43,10 +43,10 @@ function calculateTransferTime(fromArrival: string, toDeparture: string): number
 }
 
 function getTransferTimeStyle(minutes: number) {
-  if (minutes <= 6)  return { bg: "bg-red-100",    text: "text-red-700",    border: "border-red-300" }
-  if (minutes <= 10) return { bg: "bg-orange-100",  text: "text-orange-700", border: "border-orange-300" }
-  if (minutes >= 30) return { bg: "bg-green-100",   text: "text-green-700",  border: "border-green-300" }
-  return               { bg: "bg-blue-100",   text: "text-blue-700",  border: "border-blue-300" }
+  if (minutes <= 6)  return { bg: "bg-red-100 dark:bg-red-900/40",    text: "text-red-700 dark:text-red-300",    border: "border-red-300 dark:border-red-600" }
+  if (minutes <= 10) return { bg: "bg-orange-100 dark:bg-orange-900/40",  text: "text-orange-700 dark:text-orange-300", border: "border-orange-300 dark:border-orange-600" }
+  if (minutes >= 30) return { bg: "bg-green-100 dark:bg-green-900/40",   text: "text-green-700 dark:text-green-300",  border: "border-green-300 dark:border-green-600" }
+  return               { bg: "bg-blue-100 dark:bg-blue-900/40",   text: "text-blue-700 dark:text-blue-300",  border: "border-blue-300 dark:border-blue-600" }
 }
 
 function legDuration(dep: string, arr: string): string {
@@ -75,7 +75,7 @@ function vehicleLabel(leg: JourneyLeg) {
 export function JourneyTimelineVertical({ legs }: { legs: JourneyLeg[] }) {
   if (!legs || legs.length === 0) {
     return (
-      <div className="text-xs text-gray-600 text-center py-2">
+      <div className="text-xs text-gray-600 dark:text-gray-400 text-center py-2">
         Keine Verbindungsdetails verfügbar
       </div>
     )
@@ -94,11 +94,11 @@ export function JourneyTimelineVertical({ legs }: { legs: JourneyLeg[] }) {
         const duration = legDuration(leg.abfahrtsZeitpunkt, leg.ankunftsZeitpunkt)
 
         return (
-          <div key={idx} className="border-l-2 border-gray-300 pl-3">
+          <div key={idx} className="border-l-2 border-gray-300 dark:border-gray-600 pl-3">
             {/* Departure */}
             <div className="flex items-center justify-between mb-1">
-              <div className="font-semibold text-gray-800 text-xs">{leg.abfahrtsOrt}</div>
-              <div className="font-semibold text-gray-800 text-xs">{fmtTime(leg.abfahrtsZeitpunkt)}</div>
+              <div className="font-semibold text-gray-800 dark:text-gray-200 text-xs">{leg.abfahrtsOrt}</div>
+              <div className="font-semibold text-gray-800 dark:text-gray-200 text-xs">{fmtTime(leg.abfahrtsZeitpunkt)}</div>
             </div>
 
             {/* Vehicle + duration */}
@@ -108,18 +108,18 @@ export function JourneyTimelineVertical({ legs }: { legs: JourneyLeg[] }) {
               >
                 {vehicleLabel(leg)}
               </div>
-              <div className="text-xs text-gray-500">{duration}</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">{duration}</div>
             </div>
 
             {/* Arrival */}
             <div className="flex items-center justify-between mb-2">
-              <div className="font-semibold text-gray-800 text-xs">{leg.ankunftsOrt}</div>
-              <div className="font-semibold text-gray-800 text-xs">{fmtTime(leg.ankunftsZeitpunkt)}</div>
+              <div className="font-semibold text-gray-800 dark:text-gray-200 text-xs">{leg.ankunftsOrt}</div>
+              <div className="font-semibold text-gray-800 dark:text-gray-200 text-xs">{fmtTime(leg.ankunftsZeitpunkt)}</div>
             </div>
 
             {/* Transfer */}
             {!isLast && transferTime !== null && transferStyle && (
-              <div className="flex items-center justify-center py-2 border-t border-gray-200">
+              <div className="flex items-center justify-center py-2 border-t border-gray-200 dark:border-gray-700">
                 <div
                   className={`px-2 py-1 rounded-full ${transferStyle.bg} ${transferStyle.text} font-medium text-xs flex items-center gap-1 shadow-sm border ${transferStyle.border}`}
                 >
@@ -156,11 +156,11 @@ function InlineText({
 export function JourneyTimelineHorizontal({ legs }: { legs: JourneyLeg[] }) {
   if (!legs || legs.length === 0) {
     return (
-      <div className="flex items-center gap-2 text-xs text-gray-600 w-full">
-        <div className="px-2 py-1 rounded font-medium text-gray-600 bg-gray-50 border-gray-200 border">
+      <div className="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 w-full">
+        <div className="px-2 py-1 rounded font-medium text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700 border">
           Zug
         </div>
-        <div className="flex-1 h-px bg-gray-300" />
+        <div className="flex-1 h-px bg-gray-300 dark:bg-gray-600" />
       </div>
     )
   }
@@ -201,11 +201,11 @@ export function JourneyTimelineHorizontal({ legs }: { legs: JourneyLeg[] }) {
                   {(isFirst || (chunkIdx > 0 && idx === 0)) && (
                     <div className="flex min-w-0 flex-col text-center flex-shrink-0">
                       <div className={`${topRowHeight} flex items-center justify-center px-1`}>
-                        <InlineText className={`font-semibold text-gray-800 ${textSize}`}>
+                        <InlineText className={`font-semibold text-gray-800 dark:text-gray-200 ${textSize}`}>
                           {leg.abfahrtsOrt}
                         </InlineText>
                       </div>
-                      <div className={`font-semibold text-gray-800 ${textSize} mt-1`}>
+                      <div className={`font-semibold text-gray-800 dark:text-gray-200 ${textSize} mt-1`}>
                         {fmtTime(leg.abfahrtsZeitpunkt)}
                       </div>
                     </div>
@@ -214,7 +214,7 @@ export function JourneyTimelineHorizontal({ legs }: { legs: JourneyLeg[] }) {
                   {/* Line */}
                   <div className="min-w-3 flex-1 flex flex-col px-1">
                     <div className={`${topRowHeight} flex items-center`}>
-                      <div className="w-full h-px bg-gray-400" />
+                      <div className="w-full h-px bg-gray-400 dark:bg-gray-500" />
                     </div>
                     <div className={`${textSize} mt-1 invisible`}>-</div>
                   </div>
@@ -228,13 +228,13 @@ export function JourneyTimelineHorizontal({ legs }: { legs: JourneyLeg[] }) {
                         {vehicleLabel(leg)}
                       </div>
                     </div>
-                    <div className={`${textSize} text-gray-500 whitespace-nowrap mt-1`}>{duration}</div>
+                    <div className={`${textSize} text-gray-500 dark:text-gray-400 whitespace-nowrap mt-1`}>{duration}</div>
                   </div>
 
                   {/* Line */}
                   <div className="min-w-3 flex-1 flex flex-col px-1">
                     <div className={`${topRowHeight} flex items-center`}>
-                      <div className="w-full h-px bg-gray-400" />
+                      <div className="w-full h-px bg-gray-400 dark:bg-gray-500" />
                     </div>
                     <div className={`${textSize} mt-1 invisible`}>-</div>
                   </div>
@@ -242,11 +242,11 @@ export function JourneyTimelineHorizontal({ legs }: { legs: JourneyLeg[] }) {
                   {/* Arrival / transfer station */}
                   <div className="flex min-w-0 flex-col text-center flex-shrink-0">
                     <div className={`${topRowHeight} flex items-center justify-center px-1`}>
-                      <InlineText className={`font-semibold text-gray-800 ${textSize}`}>
+                      <InlineText className={`font-semibold text-gray-800 dark:text-gray-200 ${textSize}`}>
                         {leg.ankunftsOrt}
                       </InlineText>
                     </div>
-                    <div className={`font-semibold text-gray-800 ${textSize} mt-1`}>
+                    <div className={`font-semibold text-gray-800 dark:text-gray-200 ${textSize} mt-1`}>
                       {!isLast && transferTime !== null && transferStyle ? (
                         isLastInChunk && !isLastChunk ? (
                           // End of a non-final chunk row: just show arrival time
@@ -256,7 +256,7 @@ export function JourneyTimelineHorizontal({ legs }: { legs: JourneyLeg[] }) {
                         ) : (
                           // Mid-journey transfer: arr | badge | dep
                           <div className={`flex flex-wrap items-center gap-1 justify-center ${textSize}`}>
-                            <span className={`font-semibold text-gray-600 ${textSize}`}>
+                            <span className={`font-semibold text-gray-600 dark:text-gray-400 ${textSize}`}>
                               {fmtTime(leg.ankunftsZeitpunkt)}
                             </span>
                             <div
@@ -265,7 +265,7 @@ export function JourneyTimelineHorizontal({ legs }: { legs: JourneyLeg[] }) {
                               <Clock className="h-2 w-2" />
                               {transferTime}min
                             </div>
-                            <span className={`font-semibold text-gray-600 ${textSize}`}>
+                            <span className={`font-semibold text-gray-600 dark:text-gray-400 ${textSize}`}>
                               {fmtTime(nextLeg!.abfahrtsZeitpunkt)}
                             </span>
                           </div>
@@ -282,9 +282,9 @@ export function JourneyTimelineHorizontal({ legs }: { legs: JourneyLeg[] }) {
                   {isLastInChunk && !isLastChunk && (
                     <div className="flex-1 flex flex-col px-1">
                       <div className={`${topRowHeight} flex items-center justify-center`}>
-                        <ArrowRight className="h-4 w-4 text-gray-400" />
+                        <ArrowRight className="h-4 w-4 text-gray-400 dark:text-gray-500" />
                       </div>
-                      <div className={`${textSize} mt-1 text-center text-gray-400`}>weiter</div>
+                      <div className={`${textSize} mt-1 text-center text-gray-400 dark:text-gray-500`}>weiter</div>
                     </div>
                   )}
                 </React.Fragment>

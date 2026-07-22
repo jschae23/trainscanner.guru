@@ -2,7 +2,7 @@
 
 import { getAppVersion, getCurrentYear } from "@/lib/shared/app-info"
 import { Github } from "lucide-react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 interface FooterProps {
   show?: boolean
@@ -21,8 +21,8 @@ export function Footer({ show = false }: FooterProps) {
   if (!showFooter) return null
 
   return (
-    <footer className="mt-8 border-t border-gray-200 pt-8">
-      <div className="text-xs text-center text-gray-400 mt-0">
+    <footer className="mt-8 border-t border-gray-200 pt-8 dark:border-gray-700">
+      <div className="text-xs text-center text-gray-400 mt-0 dark:text-gray-500">
         <p>
           Dieses Deployment dient ausschließlich als technische Demonstration des Projekts{" "}
           <a href="https://gitlab.com/jschae23/trainscanner.site"
@@ -48,9 +48,9 @@ export function Footer({ show = false }: FooterProps) {
           .
         </p>
       </div>
-      <div className="flex flex-row justify-between items-center text-sm text-gray-500 mt-4" >
+      <div className="flex flex-row justify-between items-center text-sm text-gray-500 mt-4 dark:text-gray-400" >
         <div>
-          © {currentYear} <span className="font-medium text-gray-600">trainscanner.site</span>
+          © {currentYear} <span className="font-medium text-gray-600 dark:text-gray-300">trainscanner.site</span>
         </div>
         <div className="mt-2 sm:mt-0 flex flex-row sm:items-end items-center gap-3">
           <span>Version {appVersion}</span>
@@ -58,7 +58,7 @@ export function Footer({ show = false }: FooterProps) {
             href="https://github.com/jschae23/trainscanner.guru"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:underline mt-1 flex items-center"
+            className="text-blue-600 hover:underline mt-1 flex items-center dark:text-blue-400"
           >
             <Github className="inline w-4 h-4 mr-1" /> GitHub
           </a>

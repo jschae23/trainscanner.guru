@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
+import { ThemeProvider } from 'next-themes'
 import './globals.css'
 
 const siteUrl = 'https://trainscanner.site'
@@ -76,7 +77,7 @@ export default function RootLayout({
   const jsonLdHtml = JSON.stringify(jsonLd)
 
   return (
-    <html lang="de">
+    <html lang="de" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -91,7 +92,11 @@ html {
         `}</style>
         <title>trainscanner.site</title>
       </head>
-      <body>{children}</body>
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   )
 }

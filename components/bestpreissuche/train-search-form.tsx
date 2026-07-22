@@ -28,7 +28,7 @@ const LOG_SCOPE = "bestpreissuche.search-form"
 const ctrl = "h-11 w-full min-w-0 max-w-full box-border px-3 text-base leading-tight rounded-md border border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
 const dateTimeCtrl =
   `${ctrl} px-2 text-[16px] appearance-none [-webkit-appearance:none] [&::-webkit-date-and-time-value]:min-w-0 [&::-webkit-date-and-time-value]:text-left [&::-webkit-date-and-time-value]:p-0`
-const ctrlGhost = "bg-gray-100 text-gray-500";
+const ctrlGhost = "bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400";
 
 // 2) Global tweaks for date/time controls (Tailwind JIT via arbitrary variants)
 //    Put this <style> once in your app (e.g., here or in globals.css under @layer components)
@@ -525,23 +525,23 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
   const [umstiegszeit, setUmstiegszeit] = useState(searchParams.umstiegszeit || "normal")
 
   return (
-    <div className="bg-gradient-to-br from-gray-50 to-gray-100 p-2 sm:p-4 rounded-xl shadow-lg border border-gray-200">
+    <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900 p-2 sm:p-4 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700">
       <DateTimeStyle />
       <div className="mb-3 flex items-center justify-between gap-3 sm:mb-4">
-        <h2 className="text-lg font-bold text-gray-800 sm:text-xl">
+        <h2 className="text-lg font-bold text-gray-800 dark:text-gray-200 sm:text-xl">
           Bestpreissuche
         </h2>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-4">
-        <div className="bg-white p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100">
-          <h3 className="text-md font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+          <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
             <Map className="w-4 h-4 text-blue-600" />
             Reisedaten
           </h3>
           <div className="flex flex-row gap-2 items-end flex-nowrap mb-3">
             <div className="flex-1 min-w-0 relative">
-              <Label htmlFor="start" className="text-sm font-medium text-gray-600 mb-2 block">
+              <Label htmlFor="start" className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
                 <span className="inline-flex items-center gap-1">
                   <MapPin className="w-4 h-4 text-blue-500" />
                   Von (Startbahnhof)
@@ -560,8 +560,8 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                 autoComplete="off"
               />
               {startError && (
-                <div className="absolute z-50 w-full mt-1 bg-amber-50 border border-amber-300 rounded-md shadow-sm p-2">
-                  <p className="text-xs text-amber-800 flex items-center gap-1">
+                <div className="absolute z-50 w-full mt-1 bg-amber-50 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700 rounded-md shadow-sm p-2">
+                  <p className="text-xs text-amber-800 dark:text-amber-300 flex items-center gap-1">
                     <AlertTriangle className="w-3 h-3" />
                     {startError}
                   </p>
@@ -570,10 +570,10 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
               {showStartSuggestions && startSuggestions.length > 0 && (
                 <div 
                   ref={startSuggestionsRef}
-                  className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
+                  className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto"
                 >
                   {loadingStart && (
-                    <div className="p-2 text-sm text-gray-500 text-center flex items-center justify-center gap-2">
+                    <div className="p-2 text-sm text-gray-500 dark:text-gray-400 text-center flex items-center justify-center gap-2">
                       <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
                       Lädt...
                     </div>
@@ -582,10 +582,10 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                     <button
                       key={suggestion.extId}
                       type="button"
-                      className="w-full text-left px-3 py-2 hover:bg-blue-50 text-sm border-b border-gray-100 last:border-b-0"
+                      className="w-full text-left px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-sm border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                       onClick={() => selectStartSuggestion(suggestion)}
                     >
-                      <div className="font-medium text-gray-900">{suggestion.name}</div>
+                      <div className="font-medium text-gray-900 dark:text-gray-100">{suggestion.name}</div>
                     </button>
                   ))}
                 </div>
@@ -597,7 +597,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                 variant="outline"
                 size="icon"
                 onClick={switchStations}
-                className="bg-white hover:bg-gray-50 border-gray-300 h-11 w-11 flex items-center justify-center p-0"
+                className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 border-gray-300 dark:border-gray-600 h-11 w-11 flex items-center justify-center p-0"
                 tabIndex={-1}
                 aria-label="Bahnhöfe tauschen"
                 style={{height: '44px', width: '44px'}}
@@ -606,7 +606,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
               </Button>
             </div>
             <div className="flex-1 min-w-0 relative">
-              <Label htmlFor="ziel" className="text-sm font-medium text-gray-600 mb-2 block">
+              <Label htmlFor="ziel" className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
                 <span className="inline-flex items-center gap-1">
                   <MapPin className="w-4 h-4 text-blue-500" />
                   Nach (Zielbahnhof)
@@ -625,8 +625,8 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                 autoComplete="off"
               />
               {zielError && (
-                <div className="absolute z-50 w-full mt-1 bg-amber-50 border border-amber-300 rounded-md shadow-sm p-2">
-                  <p className="text-xs text-amber-800 flex items-center gap-1">
+                <div className="absolute z-50 w-full mt-1 bg-amber-50 dark:bg-amber-900/30 border border-amber-300 dark:border-amber-700 rounded-md shadow-sm p-2">
+                  <p className="text-xs text-amber-800 dark:text-amber-300 flex items-center gap-1">
                     <AlertTriangle className="w-3 h-3" />
                     {zielError}
                   </p>
@@ -635,10 +635,10 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
               {showZielSuggestions && zielSuggestions.length > 0 && (
                 <div 
                   ref={zielSuggestionsRef}
-                  className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
+                  className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-60 overflow-y-auto"
                 >
                   {loadingZiel && (
-                    <div className="p-2 text-sm text-gray-500 text-center flex items-center justify-center gap-2">
+                    <div className="p-2 text-sm text-gray-500 dark:text-gray-400 text-center flex items-center justify-center gap-2">
                       <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />
                       Lädt...
                     </div>
@@ -647,10 +647,10 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                     <button
                       key={suggestion.extId}
                       type="button"
-                      className="w-full text-left px-3 py-2 hover:bg-blue-50 text-sm border-b border-gray-100 last:border-b-0"
+                      className="w-full text-left px-3 py-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 text-sm border-b border-gray-100 dark:border-gray-700 last:border-b-0"
                       onClick={() => selectZielSuggestion(suggestion)}
                     >
-                      <div className="font-medium text-gray-900">{suggestion.name}</div>
+                      <div className="font-medium text-gray-900 dark:text-gray-100">{suggestion.name}</div>
                     </button>
                   ))}
                 </div>
@@ -660,7 +660,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
           {/* Restliche Felder im grid */}
           <div className="flex flex-col gap-3">
             <div>
-              <Label className="text-sm font-medium text-gray-600 mb-2 block">
+              <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
                 <span className="inline-flex items-center gap-1">
                   <Calendar className="w-4 h-4 text-blue-500" />
                   Reisezeitraum
@@ -675,7 +675,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                   min={getTomorrowISO()} // Verhindert Eingabe von Daten in der Vergangenheit
                   className={dateTimeCtrl}
                 />
-                <span className="text-gray-500 text-sm">bis</span>
+                <span className="text-gray-500 dark:text-gray-400 text-sm">bis</span>
                 <Input
                   id="reisezeitraumBis"
                   type="date"
@@ -689,7 +689,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
             {/* Zeitfilter - Optional */}
             <div className="grid grid-cols-2 gap-2">
               <div className="min-w-0">
-                <Label htmlFor="abfahrtAb" className="text-xs font-medium text-gray-600 mb-1 block">Abfahrt ab</Label>
+                <Label htmlFor="abfahrtAb" className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Abfahrt ab</Label>
                 <div className="relative">
                   <Input 
                     id="abfahrtAb" 
@@ -701,7 +701,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                   {abfahrtAb && (
                     <button
                       type="button"
-                      className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                       onClick={() => setAbfahrtAb("")}
                       tabIndex={-1}
                       aria-label="Abfahrt ab zurücksetzen"
@@ -712,7 +712,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                 </div>
               </div>
               <div className="min-w-0">
-                <Label htmlFor="ankunftBis" className="text-xs font-medium text-gray-600 mb-1 block">Ankunft bis</Label>
+                <Label htmlFor="ankunftBis" className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-1 block">Ankunft bis</Label>
                 <div className="relative">
                   <Input 
                     id="ankunftBis" 
@@ -724,7 +724,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                   {ankunftBis && (
                     <button
                       type="button"
-                      className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700"
+                      className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
                       onClick={() => setAnkunftBis("")}
                       tabIndex={-1}
                       aria-label="Ankunft bis zurücksetzen"
@@ -740,7 +740,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
           <div className="mt-3">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex-1">
-                <Label className="text-sm font-medium text-gray-600 mb-2 block">Nur diese Wochentage:</Label>
+                <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">Nur diese Wochentage:</Label>
                 <div className="flex flex-wrap gap-2">
                   {weekdayLabels.map(wd => (
                     <button
@@ -749,7 +749,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                       className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                         selectedWeekdays.includes(wd.value)
                           ? 'bg-blue-600 text-white shadow-sm'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
                       }`}
                       onClick={() => {
                         setSelectedWeekdays(prev =>
@@ -768,26 +768,26 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
               {/* Kompakte Info-Box neben den Wochentagen */}
               <div className={`flex-shrink-0 text-xs p-2 rounded-lg border ${
                 selectedDates.length >= 30
-                  ? 'text-orange-800 bg-orange-50 border-orange-200'
+                  ? 'text-orange-800 dark:text-orange-300 bg-orange-50 dark:bg-orange-900/30 border-orange-200 dark:border-orange-800'
                   : selectedDates.length > 10
-                    ? 'text-amber-800 bg-amber-50 border-amber-200'
-                    : 'text-green-800 bg-green-50 border-green-200'
+                    ? 'text-amber-800 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800'
+                    : 'text-green-800 dark:text-green-300 bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800'
               }`}>
                 <div className="flex items-center gap-1 mb-1">
                   <div className="flex-shrink-0">
                     {selectedDates.length >= 30 ? (
-                      <AlertTriangle className="w-3 h-3 text-orange-600" />
+                      <AlertTriangle className="w-3 h-3 text-orange-600 dark:text-orange-400" />
                     ) : selectedDates.length > 10 ? (
-                      <Lightbulb className="w-3 h-3 text-amber-600" />
+                      <Lightbulb className="w-3 h-3 text-amber-600 dark:text-amber-400" />
                     ) : (
-                      <CheckCircle className="w-3 h-3 text-green-600" />
+                      <CheckCircle className="w-3 h-3 text-green-600 dark:text-green-400" />
                     )}
                   </div>
-                  <div className="font-semibold text-gray-900">
+                  <div className="font-semibold text-gray-900 dark:text-gray-100">
                     {selectedDates.length >= 30 ? 'Maximum' : selectedDates.length > 10 ? 'Hinweis' : 'Optimal'} ({selectedDates.length} von max. 30 Tagen)
                   </div>
                 </div>
-                <div className="text-gray-700 leading-tight">
+                <div className="text-gray-700 dark:text-gray-300 leading-tight">
                   {selectedDates.length >= 30 ? (
                     'Es werden nur die ersten 30 Tage gesucht.'
                   ) : selectedDates.length > 10 ? (
@@ -801,14 +801,14 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
           </div>
         </div>
 
-        <div className="bg-white p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100">
-          <h3 className="text-md font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+          <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
             <User className="w-4 h-4 text-blue-600" />
             Reisende & Ermäßigung
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <Label className="text-sm font-medium text-gray-600 mb-1 block">
+              <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 block">
                 <span className="inline-flex items-center gap-1">
                   <Baby className="w-4 h-4 text-blue-500" />
                   Alter
@@ -827,7 +827,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
               </Select>
             </div>
             <div>
-              <Label className="text-sm font-medium text-gray-600 mb-1 block">
+              <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-1 block">
                 <span className="inline-flex items-center gap-1">
                   <Percent className="w-4 h-4 text-blue-500" />
                   Ermäßigung
@@ -867,7 +867,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
             </div>
           </div>
           <div className="mt-3">
-            <Label className="text-sm font-medium text-gray-600 mb-2 block">
+            <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
               <span className="inline-flex items-center gap-1">
                 <Train className="w-4 h-4 text-blue-500" />
                 Klasse
@@ -879,7 +879,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                 className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all border-2 ${
                   klasse === "KLASSE_1"
                     ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30'
                 }`}
                 onClick={() => setKlasse("KLASSE_1")}
               >
@@ -893,7 +893,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                 className={`flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-all border-2 ${
                   klasse === "KLASSE_2"
                     ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+                    : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30'
                 }`}
                 onClick={() => setKlasse("KLASSE_2")}
               >
@@ -906,8 +906,8 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
           </div>
         </div>
 
-        <div className="bg-white p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100">
-          <h3 className="text-md font-semibold text-gray-700 mb-2 sm:mb-3 flex items-center gap-2">
+        <div className="bg-white dark:bg-gray-800 p-2 sm:p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+          <h3 className="text-md font-semibold text-gray-700 dark:text-gray-300 mb-2 sm:mb-3 flex items-center gap-2">
             <Settings className="w-4 h-4 text-blue-600" />
             Optionen
           </h3>
@@ -915,7 +915,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
             {/* Schnellste Verbindungen und Direktverbindungen nebeneinander */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <Label className="text-sm font-medium text-gray-600 mb-2 block">
+                <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
                   <span className="inline-flex items-center gap-1">
                     <Zap className="w-4 h-4 text-blue-500" />
                     Schnellste Verbindungen bevorzugen
@@ -926,7 +926,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                   className={`w-full px-4 py-3 rounded-lg text-sm font-medium transition-all border-2 ${
                     schnelleVerbindungen
                       ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30'
                   }`}
                   onClick={() => setSchnelleVerbindungen(!schnelleVerbindungen)}
                 >
@@ -938,7 +938,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
               </div>
               
               <div>
-                <Label className="text-sm font-medium text-gray-600 mb-2 block">
+                <Label className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block">
                   <span className="inline-flex items-center gap-1">
                     <ArrowRight className="w-4 h-4 text-blue-500" />
                     Nur Direktverbindungen
@@ -949,7 +949,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
                   className={`w-full px-4 py-3 rounded-lg text-sm font-medium transition-all border-2 ${
                     umstiegsOption === "direkt"
                       ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                      : 'bg-white text-gray-700 border-gray-300 hover:border-blue-400 hover:bg-blue-50'
+                      : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/30'
                   }`}
                   onClick={() => setUmstiegsOption(umstiegsOption === "direkt" ? "alle" : "direkt")}
                 >
@@ -964,7 +964,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
             {/* Maximale Umstiege und Mindest-Umstiegszeit nebeneinander */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-start">
               <div className="flex flex-col h-full">
-                <Label htmlFor="maxUmstiege" className="text-sm font-medium text-gray-600 mb-2 block min-h-[22px]">
+                <Label htmlFor="maxUmstiege" className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block min-h-[22px]">
                   <span className="inline-flex items-center gap-1">
                     <Shuffle className="w-4 h-4 text-blue-500" />
                     Maximale Umstiege
@@ -995,7 +995,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
               </div>
               
               <div className="flex flex-col h-full">
-                <Label htmlFor="umstiegszeit" className="text-sm font-medium text-gray-600 mb-2 block min-h-[22px]">
+                <Label htmlFor="umstiegszeit" className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2 block min-h-[22px]">
                   <span className="inline-flex items-center gap-1">
                     <Clock className="w-4 h-4 text-blue-500" />
                     Mindest-Umstiegszeit
@@ -1033,7 +1033,7 @@ export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
             <Ticket className="w-4 h-4 mr-2" />
             Bestpreise suchen
           </Button>
-          <Button type="button" variant="outline" onClick={handleReset} className="w-full sm:w-auto border-gray-300 hover:bg-gray-50 px-6 py-3 rounded-lg">
+          <Button type="button" variant="outline" onClick={handleReset} className="w-full sm:w-auto border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 px-6 py-3 rounded-lg">
             Zurücksetzen
           </Button>
         </div>

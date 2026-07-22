@@ -55,7 +55,7 @@ export default function UrlauberfinderMap({
   return (
     <div className="w-full space-y-4">
       {/* Map Background */}
-      <div className="relative w-full bg-gradient-to-br from-blue-100 to-blue-50 rounded-lg border border-blue-200 overflow-hidden" style={{ aspectRatio: '16/10' }}>
+      <div className="relative w-full bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/40 dark:to-blue-900/30 rounded-lg border border-blue-200 dark:border-blue-800 overflow-hidden" style={{ aspectRatio: '16/10' }}>
         {/* Map container */}
         <svg className="absolute inset-0 w-full h-full opacity-10" preserveAspectRatio="none">
           <defs>
@@ -112,7 +112,7 @@ export default function UrlauberfinderMap({
               </div>
 
               {/* Label below marker */}
-              <div className="absolute top-14 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-white px-2 py-1 rounded shadow-md text-xs font-semibold text-gray-800 border border-gray-200 pointer-events-none">
+              <div className="absolute top-14 left-1/2 transform -translate-x-1/2 whitespace-nowrap bg-white dark:bg-gray-800 px-2 py-1 rounded shadow-md text-xs font-semibold text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 pointer-events-none">
                 {destination.destination}
               </div>
             </button>
@@ -120,8 +120,8 @@ export default function UrlauberfinderMap({
         })}
 
         {/* Legend */}
-        <div className="absolute bottom-3 left-3 bg-white p-3 rounded-lg shadow-md border border-gray-200 text-xs space-y-1 z-10">
-          <div className="font-semibold text-gray-700 mb-2 flex items-center gap-2">
+        <div className="absolute bottom-3 left-3 bg-white dark:bg-gray-800 p-3 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 text-xs space-y-1 z-10">
+          <div className="font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
             <TrendingDown className="w-4 h-4" />
             Preislegende
           </div>
@@ -141,7 +141,7 @@ export default function UrlauberfinderMap({
       </div>
 
       {/* Info text */}
-      <p className="text-xs text-gray-500 flex items-center gap-2">
+      <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
         <MapPin className="w-3 h-3" />
         Klicke auf einen Marker für Details. Grüne Marker = günstiger, Rote Marker = teurer
       </p>

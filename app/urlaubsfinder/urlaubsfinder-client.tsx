@@ -8,6 +8,7 @@ import { AlertCircle } from 'lucide-react'
 import { Footer } from '@/components/layout/footer'
 import { BrandLogo } from '@/components/layout/brand-logo'
 import { MainNavigation } from '@/components/layout/main-navigation'
+import { ThemeToggle } from '@/components/layout/theme-toggle'
 import { ICE_STATIONS } from '@/lib/stations/ice-stations'
 import { logError, logWarn } from '@/lib/shared/logger'
 
@@ -355,7 +356,7 @@ export default function UrlauberfinderPage({ showFooter = false }: Urlauberfinde
   }, [isLoading])
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-gray-950">
       <div className="container mx-auto px-4 py-6 max-w-6xl">
         <header className="mb-6">
           <div className="flex items-center justify-between gap-4">
@@ -365,8 +366,9 @@ export default function UrlauberfinderPage({ showFooter = false }: Urlauberfinde
                 <BrandLogo />
               </h1>
             </div>
-            <div className="hidden sm:block">
+            <div className="hidden sm:flex items-center gap-2">
               <MainNavigation active="urlaubsfinder" />
+              <ThemeToggle />
             </div>
           </div>
         </header>

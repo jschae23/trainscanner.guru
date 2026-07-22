@@ -187,17 +187,17 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
   }
 
   const getPriceColor = (price: number) => {
-    if (price === 0) return "text-gray-400"
-    if (price === minPrice) return "text-green-600"
-    if (price === maxPrice) return "text-red-600"
-    return "text-orange-600"
+    if (price === 0) return "text-gray-400 dark:text-gray-500"
+    if (price === minPrice) return "text-green-600 dark:text-green-400"
+    if (price === maxPrice) return "text-red-600 dark:text-red-400"
+    return "text-orange-600 dark:text-orange-400"
   }
 
   const getPriceBg = (price: number) => {
-    if (price === 0) return "bg-gray-50"
-    if (price === minPrice) return "bg-green-50 border-green-200 rounded"
-    if (price === maxPrice) return "bg-red-50 border-red-200 rounded"
-    return "bg-orange-50 border-orange-200 rounded"
+    if (price === 0) return "bg-gray-50 dark:bg-gray-800"
+    if (price === minPrice) return "bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800 rounded"
+    if (price === maxPrice) return "bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800 rounded"
+    return "bg-orange-50 dark:bg-orange-900/30 border-orange-200 dark:border-orange-800 rounded"
   }
 
   const handleDayClick = (dateKey: string, priceData: PriceData | undefined) => {
@@ -371,7 +371,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
 
   if (resultDates.length === 0 && !isStreaming) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-gray-500 dark:text-gray-400">
         Keine Suchergebnisse verfügbar. Bitte starte eine neue Suche.
       </div>
     )
@@ -395,24 +395,24 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
     <>
       {/* Fortschritt und Zeit */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 p-2 pb-0">
-        <div className="flex items-center gap-2 text-sm text-blue-800">
+        <div className="flex items-center gap-2 text-sm text-blue-800 dark:text-blue-300">
           {/* <span className="text-2xl">T</span> */}
           <span className="font-semibold">Suche Bestpreise</span>
           {startStation && zielStation && (
-            <span className="text-blue-600">{startStation.name} → {zielStation.name}</span>
+            <span className="text-blue-600 dark:text-blue-400">{startStation.name} → {zielStation.name}</span>
           )}
         </div>
-        <div className="flex flex-row items-center justify-between text-sm text-gray-600">
+        <div className="flex flex-row items-center justify-between text-sm text-gray-600 dark:text-gray-400">
           <div className="flex items-center gap-2">
             <span>Vergangene Zeit: {formatTime(elapsed)}</span>
             {isStreaming && !isCompleteNow && estimatedTimeRemaining > 0 && (
-              <span className="text-blue-600">noch ca. {formatTime(estimatedTimeRemaining)}</span>
+              <span className="text-blue-600 dark:text-blue-400">noch ca. {formatTime(estimatedTimeRemaining)}</span>
             )}
             {(!isStreaming || isCompleteNow) && (
-              <span className="text-green-600">Abgeschlossen</span>
+              <span className="text-green-600 dark:text-green-400">Abgeschlossen</span>
             )}
             {userCancelled && isStreaming && !isCompleteNow && (
-              <span className="text-orange-600">Wird abgebrochen...</span>
+              <span className="text-orange-600 dark:text-orange-400">Wird abgebrochen...</span>
             )}
           </div>
           {isStreaming && !isCompleteNow && onCancelSearch && (
@@ -421,7 +421,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
                 setUserCancelled(true)
                 onCancelSearch()
               }}
-              className="px-3 py-1 text-xs bg-red-100 hover:bg-red-200 text-red-700 rounded transition-colors ml-2"
+              className="px-3 py-1 text-xs bg-red-100 dark:bg-red-900/40 hover:bg-red-200 dark:hover:bg-red-800 text-red-700 dark:text-red-300 rounded transition-colors ml-2"
             >
               Abbrechen
             </button>
@@ -431,11 +431,11 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
 
       {/* Fortschrittsbalken */}
       <div className="px-2 pt-0">
-        <div className="flex justify-between text-xs text-gray-600 mb-1">
+        <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mb-1">
           <span>Tag {completedDays} von {totalDays}</span>
           <span>{displayProgress}%</span>
         </div>
-        <div className="w-full h-2 bg-blue-100 rounded">
+        <div className="w-full h-2 bg-blue-100 dark:bg-blue-900/40 rounded">
           <div
             className={`h-2 rounded transition-all ${(!isStreaming || isCompleteNow) ? 'bg-green-500' : 'bg-blue-500'}`}
             style={{width: `${displayProgress}%`}}
@@ -445,16 +445,16 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
       
       {/* Rate Limiting Info */}
       {isStreaming && typeof progressData.totalUsers === 'number' && progressData.totalUsers > 1 && (
-        <div className="bg-yellow-50 border border-yellow-200 p-3 rounded text-sm mx-2 mb-2 mt-3">
+        <div className="bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200 dark:border-yellow-800 p-3 rounded text-sm mx-2 mb-2 mt-3">
           <div className="flex items-center gap-2">
-            <div className="text-yellow-600">Warte</div>
-            <div className="text-yellow-800">
+            <div className="text-yellow-600 dark:text-yellow-400">Warte</div>
+            <div className="text-yellow-800 dark:text-yellow-200">
               <span className="font-medium">Mehrere Nutzer suchen gerade</span>
               <br />
-              <span className="text-yellow-700">{progressData.totalUsers} aktive Suchanfragen laufen parallel</span>
+              <span className="text-yellow-700 dark:text-yellow-300">{progressData.totalUsers} aktive Suchanfragen laufen parallel</span>
             </div>
           </div>
-          <div className="text-xs text-yellow-700 mt-1">
+          <div className="text-xs text-yellow-700 dark:text-yellow-300 mt-1">
             Um die DB-API zu schonen, werden viele gleichzeitige Anfragen nacheinander abgearbeitet.
             Deine Suche kann daher etwas länger dauern. Ergebnisse werden gecacht, eine Wiederholung der Suche ist dadurch schneller.
           </div>
@@ -462,7 +462,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
       )}
 
       {/* Calendar Header und Legende */}
-      <div className="bg-white rounded-lg border mt-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg border mt-4">
         {/* Calendar Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <Button
@@ -502,19 +502,19 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
         </div>
 
         {/* Price Legend immer anzeigen */}
-        <div className="p-4 border-b bg-gray-50">
+        <div className="p-4 border-b bg-gray-50 dark:bg-gray-800">
           <div className="flex items-center justify-center gap-4 sm:gap-6 text-sm">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-100 border border-green-200 rounded"></div>
-              <span className="text-green-600 font-medium">Günstigster: {minPrice > 0 ? minPrice + '€' : '– €'}</span>
+              <div className="w-3 h-3 bg-green-100 dark:bg-green-900/40 border border-green-200 dark:border-green-800 rounded"></div>
+              <span className="text-green-600 dark:text-green-400 font-medium">Günstigster: {minPrice > 0 ? minPrice + '€' : '– €'}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-orange-100 border border-orange-200 rounded"></div>
-              <span className="text-orange-600 font-medium">Durchschnitt: {prices.length > 0 ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) + '€' : '– €'}</span>
+              <div className="w-3 h-3 bg-orange-100 dark:bg-orange-900/40 border border-orange-200 dark:border-orange-800 rounded"></div>
+              <span className="text-orange-600 dark:text-orange-400 font-medium">Durchschnitt: {prices.length > 0 ? Math.round(prices.reduce((a, b) => a + b, 0) / prices.length) + '€' : '– €'}</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-red-100 border border-red-200 rounded"></div>
-              <span className="text-red-600 font-medium">Teuerster: {maxPrice > 0 ? maxPrice + '€' : '– €'}</span>
+              <div className="w-3 h-3 bg-red-100 dark:bg-red-900/40 border border-red-200 dark:border-red-800 rounded"></div>
+              <span className="text-red-600 dark:text-red-400 font-medium">Teuerster: {maxPrice > 0 ? maxPrice + '€' : '– €'}</span>
             </div>
           </div>
         </div>
@@ -527,7 +527,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
           {/* Weekday Headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {weekdays.map((day) => (
-              <div key={day} className="p-2 text-center text-sm font-medium text-gray-500">
+              <div key={day} className="p-2 text-center text-sm font-medium text-gray-500 dark:text-gray-400">
                 {day}
               </div>
             ))}
@@ -556,20 +556,20 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
                     ${!isCurrentMonth ? "opacity-30" : ""}
                     ${isToday ? "ring-2 ring-blue-500" : ""}
                     ${hasPrice ? getPriceBg(priceData.preis) : 
-                      hasResult ? "bg-gray-50" : 
-                      isPendingDay ? "bg-blue-50 border-blue-200" : "bg-white"}
+                      hasResult ? "bg-gray-50 dark:bg-gray-800" : 
+                      isPendingDay ? "bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800" : "bg-white dark:bg-gray-800"}
                     ${hasPrice ? "cursor-pointer hover:shadow-md hover:scale-105" : ""}
                   `}
                   onClick={() => hasPrice && handleDayClick(dateKey, priceData)}
                 >
                   {/* Day Number und Multiple options indicator */}
                   <div className="flex items-center justify-between mb-1">
-                    <div className="text-xs sm:text-sm font-medium text-gray-900">{day.getDate()}</div>
+                    <div className="text-xs sm:text-sm font-medium text-gray-900 dark:text-gray-100">{day.getDate()}</div>
                     {hasMultipleOptions && (
-                      <span className="text-[10px] sm:text-xs bg-blue-100 text-blue-600 px-1 rounded ml-1">{priceData.allIntervals!.length}</span>
+                      <span className="text-[10px] sm:text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 px-1 rounded ml-1">{priceData.allIntervals!.length}</span>
                     )}
                     {isPendingDay && (
-                      <span className="text-[10px] sm:text-xs bg-blue-100 text-blue-600 px-1 rounded ml-1">
+                      <span className="text-[10px] sm:text-xs bg-blue-100 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 px-1 rounded ml-1">
                         <svg className="animate-spin h-3 w-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -593,7 +593,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
                       </div>
                       {/* Departure time immer unten, absolut positioniert */}
                       {priceData.preis > 0 && priceData.abfahrtsZeitpunkt && priceData.ankunftsZeitpunkt && (
-                        <div className="absolute left-1 right-1 bottom-1 text-[10px] sm:text-xs text-gray-500 text-right pointer-events-none max-w-full flex flex-col items-end">
+                        <div className="absolute left-1 right-1 bottom-1 text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 text-right pointer-events-none max-w-full flex flex-col items-end">
                           {/* Mobil: Zwei Zeilen */}
                           <span className="block sm:hidden truncate">
                             {new Date(priceData.abfahrtsZeitpunkt).toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" })}
@@ -615,7 +615,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
                   
                   {/* Pending indicator for days being searched */}
                   {isPendingDay && (
-                    <div className="flex flex-col items-center justify-center h-full text-blue-600">
+                    <div className="flex flex-col items-center justify-center h-full text-blue-600 dark:text-blue-400">
                       <div className="text-[9px] sm:text-xs font-medium text-center max-w-full sm:max-w-none truncate whitespace-pre-line">
                         <span className="block sm:hidden">Wird<br/>geladen...</span>
                         <span className="hidden sm:inline">Wird geladen...</span>
@@ -627,7 +627,7 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
                   {/* Indikator für Tage ohne Fahrten: nur für geprüfte Tage */}
                   {hasResult && priceData?.preis === 0 && (
                     <div className="absolute bottom-1 right-1">
-                      <span className="text-gray-400 text-xs select-none">X</span>
+                      <span className="text-gray-400 dark:text-gray-500 text-xs select-none">X</span>
                     </div>
                   )}
                 </div>
@@ -638,14 +638,14 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
 
         {/* Route Info */}
         {startStation && zielStation && (
-          <div className="p-4 border-t bg-gray-50 text-center text-sm text-gray-600">
+          <div className="p-4 border-t bg-gray-50 dark:bg-gray-800 text-center text-sm text-gray-600 dark:text-gray-400">
             <div className="font-medium">
               {startStation.name} → {zielStation.name}
             </div>
             <div className="text-xs mt-1">
               Klicke auf einen Tag mit Preis für alle Verbindungen • {resultDates.length} Tage durchsucht
               {isStreaming && (
-                <span className="text-blue-600 ml-2">
+                <span className="text-blue-600 dark:text-blue-400 ml-2">
                   (Weitere Ergebnisse werden geladen...)
                 </span>
               )}
@@ -657,11 +657,11 @@ export function PriceCalendar({ results, onDayClick, startStation, zielStation, 
       {/* Popup bei Tab-Wechsel/-Schließen während Suche */}
       {showAbortModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg shadow-lg p-4 max-w-sm w-full text-center">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 max-w-sm w-full text-center">
             <div className="text-lg font-semibold mb-2">
               Suche abgebrochen
             </div>
-            <div className="text-sm text-gray-600 mb-4">
+            <div className="text-sm text-gray-600 dark:text-gray-400 mb-4">
               Die Suche wurde abgebrochen, weil der Tab geschlossen oder gewechselt wurde.<br/>
               Bitte lasse das Fenster aktiv, bis die Suche abgeschlossen ist.
             </div>

@@ -363,13 +363,13 @@ const DynamicLeafletMap = dynamic(async () => {
         <div className="space-y-3">
           <div
             ref={mapContainerRef}
-            className="h-[520px] w-full overflow-hidden rounded-lg border border-gray-200 bg-[#e5e3df] sm:h-[640px] xl:h-[720px]"
+            className="h-[520px] w-full overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-[#e5e3df] sm:h-[640px] xl:h-[720px]"
           />
           {showDurationOverlay && (
-            <div className="flex flex-wrap items-center gap-2 text-xs text-gray-600">
-              <span className="font-semibold text-gray-700">Fahrtdauer-Bereiche:</span>
+            <div className="flex flex-wrap items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+              <span className="font-semibold text-gray-700 dark:text-gray-300">Fahrtdauer-Bereiche:</span>
               {DURATION_BANDS.map(band => (
-                <span key={band.label} className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white px-2 py-1">
+                <span key={band.label} className="inline-flex items-center gap-1 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-2 py-1">
                   <span className="h-2.5 w-5 rounded-full" style={{ backgroundColor: band.color }} />
                   {band.label}
                 </span>
@@ -383,7 +383,7 @@ const DynamicLeafletMap = dynamic(async () => {
 }, {
   ssr: false,
   loading: () => (
-    <div className="flex h-[520px] w-full items-center justify-center rounded-lg border border-gray-200 bg-gray-100 text-sm text-gray-500 sm:h-[640px] xl:h-[720px]">
+    <div className="flex h-[520px] w-full items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-700 text-sm text-gray-500 dark:text-gray-400 sm:h-[640px] xl:h-[720px]">
       Karte wird geladen...
     </div>
   ),
