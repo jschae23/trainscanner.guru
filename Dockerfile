@@ -25,6 +25,9 @@ ENV PORT=3000
 RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
 COPY --from=builder /app/.next/standalone ./
+COPY --from=deps /app/node_modules/better-sqlite3 ./node_modules/better-sqlite3
+COPY --from=deps /app/node_modules/file-uri-to-path ./node_modules/file-uri-to-path
+COPY --from=deps /app/node_modules/node-gyp-build ./node_modules/node-gyp-build
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 COPY --chmod=755 entrypoint.sh /entrypoint.sh
