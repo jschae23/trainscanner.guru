@@ -55,7 +55,7 @@ export function Footer({ show = false }: FooterProps) {
         <div className="mt-2 sm:mt-0 flex flex-row sm:items-end items-center gap-3">
           <span>Version {appVersion}</span>
           <a
-            href="https://github.com/XLixl4snSU/trainscanner.site"
+            href="https://github.com/jschae23/trainscanner.guru"
             target="_blank"
             rel="noopener noreferrer"
             className="text-blue-600 hover:underline mt-1 flex items-center"

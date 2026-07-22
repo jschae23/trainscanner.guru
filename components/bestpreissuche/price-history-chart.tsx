@@ -3,11 +3,9 @@
 import { useMemo, memo } from 'react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts'
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import type { PriceHistoryEntry } from '@/lib/types'
 
-export interface PriceHistoryEntry {
-  preis: number
-  recorded_at: number
-}
+export type { PriceHistoryEntry }
 
 interface PriceHistoryChartProps {
   history: PriceHistoryEntry[]

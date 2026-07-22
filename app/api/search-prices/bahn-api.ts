@@ -13,13 +13,9 @@ import { metricsCollector } from '@/app/api/metrics/collector'
 import { logDebug, logError, logWarn } from '@/lib/shared/logger'
 import { formatDateKey, generateConnectionId, passesTimeFilter } from './utils';
 import { fetchBahn } from './bahn-http'
+import { formatTimeWindow } from '@/lib/utils'
 
 const LOG_SCOPE = "bestpreissuche.bahn"
-
-function formatTimeWindow(abfahrtAb?: string, ankunftBis?: string): string {
-  if (!abfahrtAb && !ankunftBis) return "beliebig"
-  return `${abfahrtAb || "beliebig"}-${ankunftBis || "beliebig"}`
-}
 
 function formatMaxTransfers(value: unknown): string {
   if (value === undefined || value === null || value === "" || value === "alle") {

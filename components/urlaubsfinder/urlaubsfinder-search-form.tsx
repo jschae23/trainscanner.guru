@@ -25,6 +25,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { AlertTriangle, MapPin, Calendar, Settings, User, Train, Percent, Baby, X } from "lucide-react"
 import { ICE_STATIONS, getDefaultStations } from "@/lib/stations/ice-stations"
 import { logError } from "@/lib/shared/logger"
+import type { StationSuggestion } from "@/lib/types"
 
 const LOG_SCOPE = "urlaubsfinder.search-form"
 
@@ -53,12 +54,6 @@ export interface UrlauberfinderSearchParams {
   returnAbfahrtAb?: string
   returnAnkunftBis?: string
   umstiegszeit?: string
-}
-
-interface StationSuggestion {
-  extId: string
-  id: string
-  name: string
 }
 
 const ctrl =

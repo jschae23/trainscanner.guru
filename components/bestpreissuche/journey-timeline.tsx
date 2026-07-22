@@ -1,40 +1,11 @@
 import React from "react"
 import { Clock, ArrowRight } from "lucide-react"
+import type { JourneyLeg } from "@/lib/types"
+import { getVehicleTypeStyle } from "@/lib/utils"
 
-export interface JourneyLeg {
-  abfahrtsZeitpunkt: string
-  ankunftsZeitpunkt: string
-  abfahrtsOrt: string
-  ankunftsOrt: string
-  verkehrsmittel?: {
-    produktGattung?: string
-    kategorie?: string
-    name?: string
-    mittelText?: string
-  }
-}
+export type { JourneyLeg }
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function getVehicleTypeStyle(produktGattung?: string) {
-  switch (produktGattung) {
-    case "ICE":
-      return { color: "text-red-600", bg: "bg-red-50", border: "border-red-200" }
-    case "EC_IC":
-    case "IC":
-    case "EC":
-      return { color: "text-blue-600", bg: "bg-blue-50", border: "border-blue-200" }
-    case "IR":
-    case "REGIONAL":
-      return { color: "text-green-600", bg: "bg-green-50", border: "border-green-200" }
-    case "SBAHN":
-      return { color: "text-purple-600", bg: "bg-purple-50", border: "border-purple-200" }
-    case "BUS":
-      return { color: "text-orange-600", bg: "bg-orange-50", border: "border-orange-200" }
-    default:
-      return { color: "text-gray-600", bg: "bg-gray-50", border: "border-gray-200" }
-  }
-}
 
 function calculateTransferTime(fromArrival: string, toDeparture: string): number {
   return Math.round(

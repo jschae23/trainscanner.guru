@@ -6,16 +6,12 @@ import { generateCacheKey, getCachedResult, getCacheSize, getStationSearchCacheS
 import { recommendBestPrice } from '@/lib/train-search/recommendation-engine'
 import { metricsCollector } from '@/app/api/metrics/collector'
 import { logDebug, logError, logInfo } from '@/lib/shared/logger'
+import { formatTimeWindow } from '@/lib/utils'
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 const LOG_SCOPE = "bestpreissuche.request"
-
-function formatTimeWindow(abfahrtAb?: string, ankunftBis?: string): string {
-  if (!abfahrtAb && !ankunftBis) return "beliebig"
-  return `${abfahrtAb || "beliebig"}-${ankunftBis || "beliebig"}`
-}
 
 interface TrainResult {
   preis: number

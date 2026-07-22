@@ -5,24 +5,7 @@ import { BrandLogo } from "@/components/layout/brand-logo"
 import { MainNavigation } from "@/components/layout/main-navigation"
 import { isFooterEnabled, isUrlaubsfinderEnabled } from "@/lib/shared/feature-flags"
 import { redirect } from "next/navigation"
-
-interface SearchParams {
-  start?: string
-  ziel?: string
-  reisezeitraumAb?: string
-  reisezeitraumBis?: string
-  alter?: string
-  ermaessigungArt?: string
-  ermaessigungKlasse?: string
-  abfahrtAb?: string
-  ankunftBis?: string
-  klasse?: string
-  schnelleVerbindungen?: string
-  nurDeutschlandTicketVerbindungen?: string
-  maximaleUmstiege?: string
-  umstiegszeit?: string
-  wochentage?: string
-}
+import type { SearchParams } from "@/lib/types"
 
 // Helper function to get tomorrow's date in YYYY-MM-DD format
 function getTomorrowISO() {

@@ -5,6 +5,9 @@ import { join } from 'path'
 import { existsSync, mkdirSync } from 'fs'
 import { gzipSync, gunzipSync } from 'zlib'
 import { generateConnectionId } from './utils'
+import type { PriceHistoryEntry } from '@/lib/types'
+
+export type { PriceHistoryEntry }
 
 const LOG_SCOPE = "bestpreissuche.cache"
 
@@ -572,11 +575,6 @@ process.on('SIGTERM', () => {
 })
 
 // Neue Funktion: Hole Preishistorie für einen bestimmten Tag (günstigster Preis pro Abfragezeitpunkt)
-export interface PriceHistoryEntry {
-  preis: number
-  recorded_at: number
-}
-
 export function getDayPriceHistory(
   params: {
     startStationId: string

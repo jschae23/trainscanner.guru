@@ -5,31 +5,9 @@ import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect, useRef } from "react"
 import { logWarn } from "@/lib/shared/logger"
+import type { PriceData, PriceResults } from "@/lib/types"
 
 const LOG_SCOPE = "bestpreissuche.price-calendar"
-
-interface IntervalData {
-  preis: number
-  abfahrtsZeitpunkt: string
-  ankunftsZeitpunkt: string
-  abfahrtsOrt: string
-  ankunftsOrt: string
-  info: string
-  umstiegsAnzahl?: number
-  isCheapestPerInterval?: boolean
-}
-
-interface PriceData {
-  preis: number
-  info: string
-  abfahrtsZeitpunkt: string
-  ankunftsZeitpunkt: string
-  allIntervals?: IntervalData[]
-}
-
-interface PriceResults {
-  [date: string]: PriceData
-}
 
 interface PriceCalendarProps {
   results: PriceResults

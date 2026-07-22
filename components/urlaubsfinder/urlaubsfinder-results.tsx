@@ -22,6 +22,7 @@ import {
   JourneyTimelineVertical,
   type JourneyLeg,
 } from "@/components/bestpreissuche/journey-timeline"
+import { formatDateDE } from "@/lib/utils"
 
 const DynamicLeaflet = dynamic(
   () =>
@@ -47,21 +48,6 @@ function formatTime(iso: string): string {
     return new Date(iso).toLocaleTimeString("de-DE", {
       hour: "2-digit",
       minute: "2-digit",
-      timeZone: "Europe/Berlin",
-    })
-  } catch {
-    return "–"
-  }
-}
-
-function formatDate(iso: string): string {
-  if (!iso) return "–"
-  try {
-    return new Date(iso).toLocaleDateString("de-DE", {
-      weekday: "short",
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
       timeZone: "Europe/Berlin",
     })
   } catch {
@@ -315,7 +301,7 @@ function ResultCard({
               </Badge>
               <div className="min-w-0">
                 <div className="font-bold text-gray-900 text-base truncate">{result.destination.replace(" Hbf", "")}</div>
-                <div className="text-xs text-gray-500 truncate">{formatDate(result.outwardDeparture)}</div>
+                <div className="text-xs text-gray-500 truncate">{formatDateDE(result.outwardDeparture)}</div>
               </div>
             </div>
             <div className={`text-2xl font-bold px-3 py-2 rounded-lg ${priceTone}`}>
@@ -378,8 +364,8 @@ function ResultCard({
               )}
             </div>
             <div className="text-xs text-gray-500 mt-1 leading-snug">
-              {formatDate(result.outwardDeparture)}
-              {result.returnDate ? ` · Rück ${formatDate(result.returnDeparture || result.returnDate)}` : ""}
+              {formatDateDE(result.outwardDeparture)}
+              {result.returnDate ? ` · Rück ${formatDateDE(result.returnDeparture || result.returnDate)}` : ""}
             </div>
           </div>
 

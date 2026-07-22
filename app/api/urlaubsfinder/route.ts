@@ -4,29 +4,13 @@ import { metricsCollector } from '@/app/api/metrics/collector'
 import { ICE_STATIONS } from '@/lib/stations/ice-stations'
 import { isUrlaubsfinderEnabled } from '@/lib/shared/feature-flags'
 import { logDebug, logError, logInfo } from '@/lib/shared/logger'
+import { formatTimeWindow } from '@/lib/utils'
+import type { JourneyLeg } from '@/lib/types'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
 const LOG_SCOPE = "urlaubsfinder.request"
-
-function formatTimeWindow(abfahrtAb?: string, ankunftBis?: string): string {
-  if (!abfahrtAb && !ankunftBis) return "beliebig"
-  return `${abfahrtAb || "beliebig"}-${ankunftBis || "beliebig"}`
-}
-
-interface JourneyLeg {
-  abfahrtsZeitpunkt: string
-  ankunftsZeitpunkt: string
-  abfahrtsOrt: string
-  ankunftsOrt: string
-  verkehrsmittel?: {
-    produktGattung?: string
-    kategorie?: string
-    name?: string
-    mittelText?: string
-  }
-}
 
 interface DestinationResult {
   destination: string

@@ -90,7 +90,7 @@ html {
 }
         `}</style>
         <title>trainscanner.site</title>
-      </head>
+      </head>º
       <body>{children}</body>
     </html>
   )

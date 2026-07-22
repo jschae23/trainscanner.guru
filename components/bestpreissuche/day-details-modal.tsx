@@ -17,43 +17,11 @@ import {
 } from "@/lib/train-search/day-details-utils"
 import { RecommendationCards } from "./day-recommendation-cards"
 import { ConnectionsTable } from "./day-connections-table"
-import { PriceHistoryChart, type PriceHistoryEntry } from "./price-history-chart"
+import { PriceHistoryChart } from "./price-history-chart"
 import { logWarn } from "@/lib/shared/logger"
+import type { IntervalData, PriceData, PriceHistoryEntry } from "@/lib/types"
 
 const LOG_SCOPE = "bestpreissuche.day-details"
-
-interface Interval {
-  preis: number
-  abfahrtsZeitpunkt: string
-  ankunftsZeitpunkt: string
-  abfahrtsOrt: string
-  ankunftsOrt: string
-  info: string
-  umstiegsAnzahl?: number
-  priceHistory?: PriceHistoryEntry[]
-}
-
-interface IntervalData {
-  preis: number
-  abfahrtsZeitpunkt: string
-  ankunftsZeitpunkt: string
-  abfahrtsOrt: string
-  ankunftsOrt: string
-  info: string
-  umstiegsAnzahl?: number
-  isCheapestPerInterval?: boolean
-  priceHistory?: PriceHistoryEntry[]
-}
-
-interface PriceData {
-  preis: number
-  info: string
-  abfahrtsZeitpunkt: string
-  ankunftsZeitpunkt: string
-  recordedAt?: number
-  priceHistory?: PriceHistoryEntry[]
-  allIntervals?: IntervalData[]
-}
 
 interface DayDetailsModalProps {
   isOpen: boolean

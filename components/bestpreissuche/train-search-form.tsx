@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue} from "@/components/ui/select"
 import { ArrowLeftRight, Train, User, Percent, Shuffle, ArrowRight, Ticket, Settings, MapPin, Calendar, Baby, Clock, Zap, AlertTriangle, Lightbulb, CheckCircle, Map, X } from "lucide-react"
 import { logError } from "@/lib/shared/logger"
+import type { SearchParams, StationSuggestion } from "@/lib/types"
 
 const LOG_SCOPE = "bestpreissuche.search-form"
 
@@ -54,32 +55,8 @@ const DateTimeStyle = () => (
   `}</style>
 );
 
-interface SearchParams {
-  start?: string
-  ziel?: string
-  reisezeitraumAb?: string
-  reisezeitraumBis?: string
-  alter?: string
-  ermaessigungArt?: string
-  ermaessigungKlasse?: string
-  klasse?: string
-  schnelleVerbindungen?: string
-  nurDeutschlandTicketVerbindungen?: string
-  maximaleUmstiege?: string
-  abfahrtAb?: string
-  ankunftBis?: string
-  wochentage?: string // Only weekdays, not individual dates
-  umstiegszeit?: string
-}
-
 interface TrainSearchFormProps {
   searchParams: SearchParams
-}
-
-interface StationSuggestion {
-  extId: string
-  id: string
-  name: string
 }
 
 export function TrainSearchForm({ searchParams }: TrainSearchFormProps) {
